@@ -1,8 +1,10 @@
 package com.example.backend.config;
 
 import com.example.backend.entity.RestBean;
+import com.example.backend.entity.dto.Account;
 import com.example.backend.entity.vo.response.AuthorizeVO;
 import com.example.backend.filter.JwtAuthorizeFilter;
+import com.example.backend.service.AccountService;
 import com.example.backend.utils.JwtUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
@@ -30,6 +32,9 @@ public class SecurityConfiguration {
 
     @Resource
     JwtAuthorizeFilter jwtAuthorizeFilter;
+
+    @Resource
+    AccountService accountService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -78,25 +83,21 @@ public class SecurityConfiguration {
         else {
             writer.write(RestBean.failure(400,"退出登陆失败").asJsonString());
         }
-
         System.out.println("logout");
     }
-
-
-
 
 public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
         httpServletResponse.setContentType("application/json;charset=utf-8");
         User user=(User) authentication.getPrincipal();
-        String token = jwt.createJwt(user,233,"user");
+        Account account=accountService.findAccountByNameOrEmail(user.getUsername());
+        String token = jwt.createJwt(user,account.getId(),account.getUsername());
         AuthorizeVO vo=new AuthorizeVO();
-        vo.setExpire(jwt.GetExpireTime());
-        vo.setRole("user");
-        vo.setUsername("xiaoming");
-        vo.setToken(token);
+        vo=account.asViewObject(vo.getClass(), v->{
+            v.setExpire(jwt.GetExpireTime());
+            v.setToken(token);
+        });
         System.out.println(RestBean.success(vo).asJsonString());
         httpServletResponse.getWriter().write(RestBean.success(vo).asJsonString());
-
     }
 
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
