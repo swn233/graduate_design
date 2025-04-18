@@ -40,7 +40,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(conf->conf
-                        .requestMatchers(("/api/auth/**")).permitAll()
+                        .requestMatchers(("/api/auth/*"),("/error")).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(conf->conf
                         .loginProcessingUrl("/api/auth/login")
@@ -102,6 +102,6 @@ public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpS
 
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
         httpServletResponse.setContentType("application/json;charset=utf-8");
-        httpServletResponse.getWriter().write("fail");
+        httpServletResponse.getWriter().write("验证失败");
     }
 }

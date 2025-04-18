@@ -64,7 +64,7 @@ function userLogin(){
               </el-form-item>
             </el-col>
             <el-col :span="12" style="text-align: right">
-              <el-link  @click="router.push('/welcome/reset')" style="margin: 0 20px" type="primary">忘记密码？</el-link>
+              <el-link  @click="router.push('/reset')" style="margin: 0 20px" type="primary">忘记密码？</el-link>
             </el-col>
           </el-row>
         </el-form>
@@ -77,7 +77,7 @@ function userLogin(){
         <span style="font-size: 14px;color: grey">没有账号</span>
       </el-divider>
       <div style="text-align: center">
-        <el-button @click="router.push('/welcome/register')" style="width: 270px" type="warning" plain>立即注册</el-button>
+        <el-button @click="router.push('/register')" style="width: 270px" type="warning" plain>立即注册</el-button>
       </div>
     </div>
   </div>
