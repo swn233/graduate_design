@@ -35,13 +35,24 @@ function toggleSidebar() {
 
 <template>
   <el-container class="layout-container">
-    <!-- 左侧边栏 -->
-    <el-aside :width="isCollapse ? '64px' : '200px'" class="sidebar">
+    <!-- header -->
+    <el-header class="header">
+      <div class="header-left">
+      <div class="toggle-btn" @click="toggleSidebar">
+          <el-icon v-if="isCollapse"><icon-expand /></el-icon>
+          <el-icon v-else><icon-fold /></el-icon>
+    </div>
       <div class="logo-container">
-        <h2 class="logo-text" v-if="!isCollapse"><span class="paic-text">PAIC</span>人工智能案例平台</h2>
-        <h2 class="logo-text" v-else><span class="paic-text">PAIC</span></h2>
+        <h2 class="logo-text" ><span class="paic-text">PAIC</span>人工智能案例平台</h2>
       </div>
-      
+    </div>
+        <div class="header-right">
+          <el-button @click="userLogout" type="primary" size="small">退出登录</el-button>
+        </div>
+      </el-header>
+    <!-- 左侧边栏 -->
+  <el-container>
+    <el-aside :width="isCollapse ? '64px' : '100px'" class="sidebar">
       <el-menu
         :default-active="activeIndex"
         class="el-menu-vertical"
@@ -49,7 +60,8 @@ function toggleSidebar() {
         @select="handleSelect"
         background-color="#001529"
         text-color="#fff"
-        active-text-color="#409EFF">
+        active-text-color="#409EFF"
+        collapse-transition="true">
         
         <el-menu-item index="explore">
           <el-icon><icon-compass /></el-icon>
@@ -69,20 +81,8 @@ function toggleSidebar() {
         </el-menu-item>
       </el-menu>
     </el-aside>
-    
     <!-- 主内容区 -->
-  <el-container>
-      <el-header class="header">
-        <div class="toggle-btn" @click="toggleSidebar">
-          <el-icon v-if="isCollapse"><icon-expand /></el-icon>
-          <el-icon v-else><icon-fold /></el-icon>
-        </div>
-        <div class="header-right">
-          <el-button @click="userLogout" type="primary" size="small">退出登录</el-button>
-        </div>
-      </el-header>
-      
-      <el-main style="margin: 0px;padding: 0px;">
+      <el-main style="margin: 0px;padding: 0px;height: 100vh;">
         <!-- 根据选择的菜单项显示不同的内容 -->
          <!-- 探索页面 -->
         <explore-index v-if="activeIndex === 'explore'" :is-collapse="isCollapse" />
@@ -97,7 +97,7 @@ function toggleSidebar() {
           <p>这里是PAIC人工智能案例平台的个人页面，您可以在这里管理您的个人信息和案例。</p>
         </div>
       </el-main>
-    </el-container>
+  </el-container>
   </el-container>
 </template>
 
@@ -105,6 +105,7 @@ function toggleSidebar() {
 .layout-container {
   height: 100vh;
   width: 100%;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -133,6 +134,7 @@ function toggleSidebar() {
   text-overflow: ellipsis;
   font-size: 16px;
   transition: all 0.3s;
+  color: black;
 }
 
 .paic-text {
@@ -140,7 +142,7 @@ function toggleSidebar() {
   font-style: italic;
   font-family: 'Georgia', serif;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 24px;
   margin-right: 8px;
 }
 
@@ -154,15 +156,16 @@ function toggleSidebar() {
 }
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #fff;
   border-bottom: 1px solid #e6e6e6;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
+  padding: 0px;
 }
 
 .toggle-btn {
+  margin-top: 10px;
   cursor: pointer;
   font-size: 20px;
   display: flex;
@@ -181,9 +184,15 @@ function toggleSidebar() {
 .header-right {
   display: flex;
   align-items: center;
+  margin-right: 10px;
 }
 
 .el-menu-vertical {
   border-right: none;
+}
+
+.header-left {
+  display: flex;
+  align-items: left;
 }
 </style>
