@@ -1,6 +1,13 @@
 <script setup>
 import { ref } from 'vue'
-import { Search, View, Menu, Picture, Star } from '@element-plus/icons-vue'
+import { Search, View, Menu, Picture, Star, Coin, PieChart, Pointer } from '@element-plus/icons-vue'
+
+const props = defineProps({
+  isCollapse: {
+    type: Boolean,
+    default: false
+  }
+})
 
 const activeMenu = ref('overview')
 const searchQuery = ref('')
@@ -10,19 +17,19 @@ const carouselItems = ref([
   {
     id: 1,
     title: '2025百度毕业生AI技术创新大赛',
-    image: 'https://via.placeholder.com/800x200/409EFF/ffffff?text=AI技术创新大赛',
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=200&fit=crop&q=80',
     link: '#'
   },
   {
     id: 2,
     title: 'ERNIE-X1 API服务上线',
-    image: 'https://via.placeholder.com/800x200/67C23A/ffffff?text=ERNIE-X1+API服务',
+    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=200&fit=crop&q=80',
     link: '#'
   },
   {
     id: 3,
     title: 'QWQ-7B千问大模型',
-    image: 'https://via.placeholder.com/800x200/E6A23C/ffffff?text=QWQ-7B千问大模型',
+    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=50&h=50&fit=crop&q=80',
     link: '#'
   }
 ])
@@ -32,7 +39,7 @@ const hotApps = ref([
   {
     id: 1,
     title: 'smartpaper | arxiv一键读懂',
-    icon: 'https://via.placeholder.com/50/409EFF/ffffff?text=S',
+    icon: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=50&h=50&fit=crop&q=80',
     author: '复可',
     views: 4300,
     likes: 36
@@ -40,7 +47,7 @@ const hotApps = ref([
   {
     id: 2,
     title: 'DeepResearch | 实现AI论文解读',
-    icon: 'https://via.placeholder.com/50/67C23A/ffffff?text=D',
+    icon: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=50&h=50&fit=crop&q=80',
     author: '魔术师',
     views: 4000,
     likes: 15
@@ -48,7 +55,7 @@ const hotApps = ref([
   {
     id: 3,
     title: 'DeepSeek R1 | Chat集成工具',
-    icon: 'https://via.placeholder.com/50/E6A23C/ffffff?text=D',
+    icon: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=50&h=50&fit=crop&q=80',
     author: 'Maplemx',
     views: 6400,
     likes: 16
@@ -56,7 +63,7 @@ const hotApps = ref([
   {
     id: 4,
     title: 'AI绘画 | 一键生成精美图像',
-    icon: 'https://via.placeholder.com/50/F56C6C/ffffff?text=A',
+    icon: 'https://images.unsplash.com/photo-1681319350180-6c7844a09c86?w=50&h=50&fit=crop&q=80',
     author: '飞速',
     views: 14000,
     likes: 42
@@ -92,25 +99,26 @@ const cases = ref([
 <template>
   <div class="explore-layout">
     <!-- 侧边栏 -->
-    <div class="explore-sidebar">
+    <div class="explore-sidebar" :style="{ width: props.isCollapse ? '64px' : '150px' }">
       <el-menu
         :default-active="activeMenu"
         class="explore-menu"
+        :collapse="props.isCollapse"
         @select="activeMenu = $event">
         <el-menu-item index="overview">
-          <el-icon><Menu /></el-icon>
+          <el-icon><Files /></el-icon>
           <span>概览</span>
         </el-menu-item>
         <el-menu-item index="datasets">
-          <el-icon><Menu /></el-icon>
+          <el-icon><Coin /></el-icon>
           <span>数据集</span>
         </el-menu-item>
         <el-menu-item index="models">
-          <el-icon><Menu /></el-icon>
+          <el-icon><PieChart /></el-icon>
           <span>模型库</span>
         </el-menu-item>
         <el-menu-item index="experience">
-          <el-icon><Menu /></el-icon>
+          <el-icon><Pointer /></el-icon>
           <span>体验中心</span>
         </el-menu-item>
       </el-menu>
@@ -146,7 +154,7 @@ const cases = ref([
         <!-- 热门应用部分 -->
         <div class="hot-apps-section">
           <div class="section-header">
-            <h2 class="section-title"><el-icon><Star /></el-icon> 热门应用</h2>
+            <h2 class="section-title"><el-icon><Star /></el-icon> 热门案例</h2>
           </div>
           <div class="hot-apps-grid">
             <el-card v-for="app in hotApps" :key="app.id" class="hot-app-card" shadow="hover">
@@ -224,10 +232,10 @@ const cases = ref([
 }
 
 .explore-sidebar {
-  width: 200px;
   border-right: 1px solid #dcdfe6;
   height: 100%;
   background-color: #fff;
+  transition: width 0.3s ease;
 }
 
 .explore-menu {
@@ -271,10 +279,11 @@ const cases = ref([
 }
 
 .carousel-title {
-  margin: 0;
+  margin-bottom: 40px;
   font-size: 20px;
   font-weight: bold;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  color: white;
 }
 
 /* 热门应用样式 */
