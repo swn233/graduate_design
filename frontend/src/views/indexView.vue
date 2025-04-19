@@ -1,7 +1,7 @@
 <script setup>
-import {logout} from "@/net/index.js";
+import {logout, takeRole,takeUsername} from "@/net/index.js";
 import router from "@/router/index.js";
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import ExploreIndex from './explore/exploreIndex.vue';
 import {
   Menu as IconMenu,
@@ -19,8 +19,8 @@ import {
 } from '@element-plus/icons-vue';
 
 const userInfo = ref({
-  name: '张三',
-  role: '管理员',
+  name: '',
+  role: '',
   avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
 });
 
@@ -42,6 +42,13 @@ function handleSelect(key) {
 function toggleSidebar() {
   isCollapse.value = !isCollapse.value;
 }
+
+onMounted(() => {
+  const username = JSON.parse(takeUsername());
+  const role = JSON.parse(takeRole());
+  userInfo.value.name = username || '';
+  userInfo.value.role = role === 'admin' ? '管理员' : '用户';
+});
 </script>
 
 <template>

@@ -29,7 +29,7 @@ import { Transition } from 'vue'
   position:absolute;
   bottom:30px;
   left:30px;
-  color: #478a76;
+  color: #01012f;
   text-shadow: 0px 0px 10px;
 }
 .right-card{

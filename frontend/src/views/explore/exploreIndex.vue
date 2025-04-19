@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue'
-import { Search, View, Menu, Picture, Star, Coin, PieChart, Pointer } from '@element-plus/icons-vue'
+import { Coin, PieChart, Pointer } from '@element-plus/icons-vue'
+import Overview from './main/overview.vue'
+import Datasets from './main/datasets.vue'
+import Models from './main/models.vue'
+import Experience from './main/experience.vue'
 
 const props = defineProps({
   isCollapse: {
@@ -10,90 +14,6 @@ const props = defineProps({
 })
 
 const activeMenu = ref('overview')
-const searchQuery = ref('')
-
-// 轮播图数据
-const carouselItems = ref([
-  {
-    id: 1,
-    title: '2025百度毕业生AI技术创新大赛',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=200&fit=crop&q=80',
-    link: '#'
-  },
-  {
-    id: 2,
-    title: 'ERNIE-X1 API服务上线',
-    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=200&fit=crop&q=80',
-    link: '#'
-  },
-  {
-    id: 3,
-    title: 'QWQ-7B千问大模型',
-    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=50&h=50&fit=crop&q=80',
-    link: '#'
-  }
-])
-
-// 热门应用数据
-const hotApps = ref([
-  {
-    id: 1,
-    title: 'smartpaper | arxiv一键读懂',
-    icon: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=50&h=50&fit=crop&q=80',
-    author: '复可',
-    views: 4300,
-    likes: 36
-  },
-  {
-    id: 2,
-    title: 'DeepResearch | 实现AI论文解读',
-    icon: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=50&h=50&fit=crop&q=80',
-    author: '魔术师',
-    views: 4000,
-    likes: 15
-  },
-  {
-    id: 3,
-    title: 'DeepSeek R1 | Chat集成工具',
-    icon: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=50&h=50&fit=crop&q=80',
-    author: 'Maplemx',
-    views: 6400,
-    likes: 16
-  },
-  {
-    id: 4,
-    title: 'AI绘画 | 一键生成精美图像',
-    icon: 'https://images.unsplash.com/photo-1681319350180-6c7844a09c86?w=50&h=50&fit=crop&q=80',
-    author: '飞速',
-    views: 14000,
-    likes: 42
-  }
-])
-
-// 案例数据
-const cases = ref([
-  {
-    title: '智能图像识别系统',
-    category: '计算机视觉',
-    type: 'success',
-    description: '基于深度学习的图像识别系统，可以准确识别和分类各种物体、场景和人脸。',
-    views: 1234
-  },
-  {
-    title: '自然语言处理助手',
-    category: 'NLP',
-    type: 'warning',
-    description: '智能文本分析和处理系统，支持多语言翻译、情感分析和文本摘要。',
-    views: 856
-  },
-  {
-    title: '智能推荐系统',
-    category: '机器学习',
-    type: 'danger',
-    description: '基于用户行为的个性化推荐系统，提供精准的内容和产品推荐。',
-    views: 2045
-  }
-])
 </script>
 
 <template>
@@ -127,106 +47,16 @@ const cases = ref([
     <!-- 主内容区 -->
     <div class="explore-content">
       <!-- 概览内容 -->
-      <div v-if="activeMenu === 'overview'" class="explore-container">
-        <div class="search-section">
-          <el-input
-            v-model="searchQuery"
-            placeholder="输入AI应用关键词"
-            class="search-input"
-            clearable>
-            <template #prefix>
-              <el-icon><Search /></el-icon>
-            </template>
-          </el-input>
-        </div>
-
-        <!-- 轮播图部分 -->
-        <div class="carousel-section">
-          <el-carousel :interval="4000" type="card" height="200px">
-            <el-carousel-item v-for="item in carouselItems" :key="item.id">
-              <div class="carousel-content" :style="{backgroundImage: `url(${item.image})`}">
-                <h3 class="carousel-title">{{ item.title }}</h3>
-              </div>
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-
-        <!-- 热门应用部分 -->
-        <div class="hot-apps-section">
-          <div class="section-header">
-            <h2 class="section-title"><el-icon><Star /></el-icon> 热门应用</h2>
-
-
-          </div>
-
-          <div class="hot-apps-wrapper">
-            <div class="hot-apps-grid" :class="{ 'collapsed': props.isCollapse, 'expanded': !props.isCollapse }">
-              <el-card v-for="app in hotApps" :key="app.id" class="hot-app-card" shadow="hover">
-                <div class="hot-app-content">
-                  <div class="hot-app-icon">
-                    <img :src="app.icon" :alt="app.title">
-                  </div>
-                  <div class="hot-app-info">
-                    <h3 class="hot-app-title">{{ app.title }}</h3>
-                    <div class="hot-app-author">{{ app.author }}</div>
-                  </div>
-                </div>
-                <div class="hot-app-footer">
-                  <span class="hot-app-stats">
-                    <span class="hot-app-views"><el-icon><View /></el-icon> {{ app.views }}</span>
-                    <span class="hot-app-likes"><el-icon><Star /></el-icon> {{ app.likes }}</span>
-                  </span>
-                </div>
-              </el-card>
-            </div>
-          </div>
-        </div>
-
-        <!-- AI案例部分 -->
-        <div class="cases-section">
-          <div class="section-header">
-            <h2 class="section-title"><el-icon><Picture /></el-icon> AI案例展示</h2>
-          </div>
-          <div class="cases-wrapper">
-            <div class="cases-grid" :class="{ 'collapsed': props.isCollapse, 'expanded': !props.isCollapse }">
-              <el-card v-for="(item, index) in cases" :key="index" class="case-card">
-                <template #header>
-                  <div class="card-header">
-                    <h3>{{ item.title }}</h3>
-                    <el-tag size="small" :type="item.type">{{ item.category }}</el-tag>
-                  </div>
-                </template>
-                <p class="case-description">{{ item.description }}</p>
-                <div class="case-footer">
-                  <el-button type="primary" size="small">查看详情</el-button>
-                  <span class="view-count">
-                    <el-icon><View /></el-icon>
-                    {{ item.views }}
-                  </span>
-                </div>
-              </el-card>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Overview v-if="activeMenu === 'overview'" :isCollapse="props.isCollapse" />
 
       <!-- 数据集内容 -->
-      <div v-else-if="activeMenu === 'datasets'" class="explore-container">
-        <h1 class="explore-title">数据集</h1>
-        <p>这里是数据集内容</p>
-      </div>
+      <Datasets v-else-if="activeMenu === 'datasets'" :isCollapse="props.isCollapse" />
 
       <!-- 模型库内容 -->
-      <div v-else-if="activeMenu === 'models'" class="explore-container">
-        <h1 class="explore-title">模型库</h1>
-        <p>这里是模型库内容</p>
-      </div>
+      <Models v-else-if="activeMenu === 'models'" :isCollapse="props.isCollapse" />
 
       <!-- 体验中心内容 -->
-      <div v-else-if="activeMenu === 'experience'" class="explore-container">
-        <h1 class="explore-title">体验中心</h1>
-        <p>这里是体验中心内容</p>
-      </div>
+      <Experience v-else-if="activeMenu === 'experience'" :isCollapse="props.isCollapse" />
     </div>
   </div>
 </template>

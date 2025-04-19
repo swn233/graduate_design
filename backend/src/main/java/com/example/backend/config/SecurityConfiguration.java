@@ -102,6 +102,6 @@ public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpS
 
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
         httpServletResponse.setContentType("application/json;charset=utf-8");
-        httpServletResponse.getWriter().write("验证失败");
+        httpServletResponse.getWriter().write(RestBean.failure(400,"登录失败,用户名或密码错误").asJsonString());
     }
 }

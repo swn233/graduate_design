@@ -24,7 +24,11 @@ const rule={
 function userLogin(){
   formRef.value.validate((valid)=>{
     if (valid)
-      login(form.value.username,form.value.password,form.value.remember,()=>{router.push('/index')})
+      login(form.value.username,form.value.password,form.value.remember,
+    ()=>{
+      router.push('/index')
+      
+    })
   })
 }
 </script>

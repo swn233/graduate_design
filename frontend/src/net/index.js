@@ -8,6 +8,7 @@ export function unauthorized() {
 
 const authItemName="access_token"
 const roleName="Role"
+const userName="Username"
 const defaultError=(err)=>{
     console.log(err)
     ElMessage.warning('发生了一些错误，请联系管理员')
@@ -78,10 +79,14 @@ function takeAccessToken(){
     return authObj.token
 }
 
-function storeRole(role){
+function storeUserinfo(data){
     let str=sessionStorage.getItem(roleName)
     if (str)deleteRole()
-    str=JSON.stringify(role)
+    let strU=sessionStorage.getItem(userName)
+    if (strU)deleteUsername()
+    str=JSON.stringify(data.role)
+    strU=JSON.stringify(data.username)
+    sessionStorage.setItem(userName,strU)
     sessionStorage.setItem(roleName,str)
 }
 
@@ -90,10 +95,18 @@ function takeRole(){
     if(!str)return null
     return str
 }
-
+function takeUsername(){
+    const str=sessionStorage.getItem(userName)
+    if(!str)return null
+    return str
+}
 function deleteRole(){
     sessionStorage.removeItem(roleName)
 }
+function deleteUsername(){
+    sessionStorage.removeItem(userName)
+}
+
 function login(username,password,remember,success,failure=defaultFailure){
     internalPost('/api/auth/login',{
         username:username,
@@ -103,7 +116,8 @@ function login(username,password,remember,success,failure=defaultFailure){
     },(data)=>{
         storeAccessToken(data.token,remember,data.expire)
         ElMessage.success(`登陆成功，欢迎${data.username}来到本平台`)
-        storeRole(data.role)
+        storeUserinfo(data)
+        
         success(data)
     },failure)
 }
@@ -128,4 +142,4 @@ function logout(success,failure=defaultFailure){
     },failure)
 }
 
-export  {login,logout,get,post,accessHeader,takeRole}
+export  {login,logout,get,post,accessHeader,takeRole,takeUsername}
