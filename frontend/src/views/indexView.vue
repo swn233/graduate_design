@@ -12,11 +12,22 @@ import {
   Compass as IconCompass,
   Reading as IconReading,
   Fold as IconFold,
-  Expand as IconExpand
+  Expand as IconExpand,
+  ArrowDown as IconArrowDown,
+  Search as IconSearch,
+  SwitchButton as IconSwitchButton
 } from '@element-plus/icons-vue';
 
-function userLogout(){
-  logout(()=>router.push('/'))
+const userInfo = ref({
+  name: '张三',
+  role: '管理员',
+  avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+});
+
+function handleCommand(command) {
+  if (command === 'logout') {
+    logout(() => router.push('/'))
+  }
 }
 
 const activeIndex = ref('explore');
@@ -47,7 +58,37 @@ function toggleSidebar() {
       </div>
     </div>
         <div class="header-right">
-          <el-button @click="userLogout" type="primary" size="small">退出登录</el-button>
+          <div class="search-container">
+            <el-input
+              placeholder="请输入搜索关键词"
+              prefix-icon="icon-search"
+              size="small"
+              class="search-input">
+              <template #prefix>
+                <el-icon><icon-search /></el-icon>
+              </template>
+            </el-input>
+          </div>
+          <el-dropdown trigger="hover" @command="handleCommand">
+            <div class="user-avatar-container">
+              <el-avatar :size="32" :src="userInfo.avatar" />
+              <span class="user-name">{{ userInfo.name }}</span>
+              <el-icon class="el-icon--right"><icon-arrow-down /></el-icon>
+            </div>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item disabled>
+                  <div class="user-info">
+                    <span class="user-role">{{ userInfo.role }}</span>
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item divided command="logout">
+                  <el-icon><icon-switch-button /></el-icon>
+                  <span style="margin-left: 5px;">退出登录</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
       </el-header>
     <!-- 左侧边栏 -->
@@ -155,6 +196,19 @@ function toggleSidebar() {
   transition: all 0.3s ease;
 }
 
+.el-menu-item span {
+  display: inline-block;
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.el-menu--collapse .el-menu-item span {
+  opacity: 0;
+  transform: translateX(10px);
+  width: 0;
+  overflow: hidden;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -184,7 +238,37 @@ function toggleSidebar() {
 .header-right {
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 20px;
+}
+
+.search-container {
+  margin-right: 30px;
+}
+
+.search-input {
+  width: 300px;
+}
+
+.user-avatar-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 8px;
+}
+
+.user-name {
+  margin: 0 8px;
+  font-size: 14px;
+  color: #606266;
+}
+
+.user-info {
+  padding: 4px 0;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #909399;
 }
 
 .el-menu-vertical {

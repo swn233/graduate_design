@@ -99,7 +99,7 @@ const cases = ref([
 <template>
   <div class="explore-layout">
     <!-- 侧边栏 -->
-    <div class="explore-sidebar" :style="{ width: props.isCollapse ? '64px' : '150px' }">
+    <div class="explore-sidebar" :style="{ width: props.isCollapse ? '64px' : '130px' }">
       <el-menu
         :default-active="activeMenu"
         class="explore-menu"
@@ -107,19 +107,19 @@ const cases = ref([
         @select="activeMenu = $event">
         <el-menu-item index="overview">
           <el-icon><Files /></el-icon>
-          <span>概览</span>
+          <span class="menu-text">概览</span>
         </el-menu-item>
         <el-menu-item index="datasets">
           <el-icon><Coin /></el-icon>
-          <span>数据集</span>
+          <span class="menu-text">数据集</span>
         </el-menu-item>
         <el-menu-item index="models">
           <el-icon><PieChart /></el-icon>
-          <span>模型库</span>
+          <span class="menu-text">模型库</span>
         </el-menu-item>
         <el-menu-item index="experience">
           <el-icon><Pointer /></el-icon>
-          <span>体验中心</span>
+          <span class="menu-text">体验中心</span>
         </el-menu-item>
       </el-menu>
     </div>
@@ -154,26 +154,31 @@ const cases = ref([
         <!-- 热门应用部分 -->
         <div class="hot-apps-section">
           <div class="section-header">
-            <h2 class="section-title"><el-icon><Star /></el-icon> 热门案例</h2>
+            <h2 class="section-title"><el-icon><Star /></el-icon> 热门应用</h2>
+
+
           </div>
-          <div class="hot-apps-grid">
-            <el-card v-for="app in hotApps" :key="app.id" class="hot-app-card" shadow="hover">
-              <div class="hot-app-content">
-                <div class="hot-app-icon">
-                  <img :src="app.icon" :alt="app.title">
+
+          <div class="hot-apps-wrapper">
+            <div class="hot-apps-grid" :class="{ 'collapsed': props.isCollapse, 'expanded': !props.isCollapse }">
+              <el-card v-for="app in hotApps" :key="app.id" class="hot-app-card" shadow="hover">
+                <div class="hot-app-content">
+                  <div class="hot-app-icon">
+                    <img :src="app.icon" :alt="app.title">
+                  </div>
+                  <div class="hot-app-info">
+                    <h3 class="hot-app-title">{{ app.title }}</h3>
+                    <div class="hot-app-author">{{ app.author }}</div>
+                  </div>
                 </div>
-                <div class="hot-app-info">
-                  <h3 class="hot-app-title">{{ app.title }}</h3>
-                  <div class="hot-app-author">{{ app.author }}</div>
+                <div class="hot-app-footer">
+                  <span class="hot-app-stats">
+                    <span class="hot-app-views"><el-icon><View /></el-icon> {{ app.views }}</span>
+                    <span class="hot-app-likes"><el-icon><Star /></el-icon> {{ app.likes }}</span>
+                  </span>
                 </div>
-              </div>
-              <div class="hot-app-footer">
-                <span class="hot-app-stats">
-                  <span class="hot-app-views"><el-icon><View /></el-icon> {{ app.views }}</span>
-                  <span class="hot-app-likes"><el-icon><Star /></el-icon> {{ app.likes }}</span>
-                </span>
-              </div>
-            </el-card>
+              </el-card>
+            </div>
           </div>
         </div>
 
@@ -182,23 +187,25 @@ const cases = ref([
           <div class="section-header">
             <h2 class="section-title"><el-icon><Picture /></el-icon> AI案例展示</h2>
           </div>
-          <div class="cases-grid">
-            <el-card v-for="(item, index) in cases" :key="index" class="case-card">
-              <template #header>
-                <div class="card-header">
-                  <h3>{{ item.title }}</h3>
-                  <el-tag size="small" :type="item.type">{{ item.category }}</el-tag>
+          <div class="cases-wrapper">
+            <div class="cases-grid" :class="{ 'collapsed': props.isCollapse, 'expanded': !props.isCollapse }">
+              <el-card v-for="(item, index) in cases" :key="index" class="case-card">
+                <template #header>
+                  <div class="card-header">
+                    <h3>{{ item.title }}</h3>
+                    <el-tag size="small" :type="item.type">{{ item.category }}</el-tag>
+                  </div>
+                </template>
+                <p class="case-description">{{ item.description }}</p>
+                <div class="case-footer">
+                  <el-button type="primary" size="small">查看详情</el-button>
+                  <span class="view-count">
+                    <el-icon><View /></el-icon>
+                    {{ item.views }}
+                  </span>
                 </div>
-              </template>
-              <p class="case-description">{{ item.description }}</p>
-              <div class="case-footer">
-                <el-button type="primary" size="small">查看详情</el-button>
-                <span class="view-count">
-                  <el-icon><View /></el-icon>
-                  {{ item.views }}
-                </span>
-              </div>
-            </el-card>
+              </el-card>
+            </div>
           </div>
         </div>
       </div>
@@ -307,10 +314,39 @@ const cases = ref([
   margin-bottom: 30px;
 }
 
+.hot-apps-wrapper {
+  width: 100%;
+  transition: all 0.3s ease;
+  padding-right: 16px;
+}
+
 .hot-apps-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+  transition: all 0.3s ease;
+}
+
+.hot-apps-grid.collapsed {
+  grid-template-columns: repeat(4, 1fr);
+  margin-left: 0;
+}
+
+.hot-apps-grid.expanded {
+  grid-template-columns: repeat(4, 1fr);
+  margin-left: 0;
+}
+
+@media (max-width: 1400px) {
+  .hot-apps-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  .hot-apps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .hot-app-card {
@@ -385,10 +421,39 @@ const cases = ref([
   margin-bottom: 30px;
 }
 
+.cases-wrapper {
+  width: 100%;
+  transition: all 0.3s ease;
+  padding-right: 16px;
+}
+
 .cases-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+  transition: all 0.3s ease;
+}
+
+.cases-grid.collapsed {
+  grid-template-columns: repeat(2, 1fr);
+  margin-left: 0;
+}
+
+.cases-grid.expanded {
+  grid-template-columns: repeat(2, 1fr);
+  margin-left: 0;
+}
+
+@media (max-width: 1400px) {
+  .cases-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .cases-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .case-card {
@@ -432,5 +497,17 @@ const cases = ref([
   display: flex;
   align-items: center;
   gap: 5px;
+}
+.menu-text {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.el-menu--collapse .menu-text {
+  opacity: 0;
+  transform: translateX(10px);
 }
 </style>
