@@ -18,8 +18,10 @@ const carouselItems = ref([])
 // 获取轮播图数据
 const loadCarouselData = async () => {
   try {
-    const data = await fetchCarouselArticles()
-    carouselItems.value = data
+    const response = await fetchCarouselArticles()
+    console.log('完整接口响应:', response)
+    carouselItems.value = response
+    console.log('处理后的轮播数据:', carouselItems.value)
   } catch (error) {
     console.error('获取轮播图数据失败:', error)
   }

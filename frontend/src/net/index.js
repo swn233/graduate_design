@@ -131,7 +131,8 @@ function accessHeader() {
 }
 
 function get(url,success,failure=defaultFailure){
-    internalGet(url,accessHeader(),success,failure)
+    const headers = accessHeader();
+    internalGet(url, headers, success, failure)
 }
 
 function logout(success,failure=defaultFailure){
