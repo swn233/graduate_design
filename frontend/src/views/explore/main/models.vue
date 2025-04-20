@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue'
-import { Search, Plus } from '@element-plus/icons-vue'
+import { ref, reactive } from 'vue'
+import { Search, ArrowDown, View, Download, Star } from '@element-plus/icons-vue'
 
 const props = defineProps({
   isCollapse: {
@@ -9,108 +9,271 @@ const props = defineProps({
   }
 })
 
-const searchQuery = ref('')
-const sortBy = ref('综合排序')
-
-const taskTypes = ref([
-  { label: '文心大模型', value: 'wenxin' },
-  { label: '大语言模型', value: 'llm' },
-  { label: '支持训练', value: 'training' }
-])
-
-const applicationScenes = ref([
-  { label: '基础模型', value: 'base' },
-  { label: '产业方案', value: 'industry' },
-  { label: '创意工坊', value: 'creative' }
-])
-
-const models = ref([
+// 模型数据
+const modelList = ref([
   {
     id: 1,
     name: 'ERNIE X1',
-    description: '文心大模型X1是最完善的模型，提供、识别、反馈、进化能力，作为能力基座面向各类场景，文心X1...',
+    description: '文心大模型X1具备强大的理解、规划、反思、迭代能力，作为能力支撑的基座大模型，文心X1...',
     tags: ['文心大模型', '大语言模型'],
-    author: '飞桨AI Studio',
-    usage: '75k',
+    otherTags: ['other'],
+    studio: '飞桨AI Studio',
+    views: '75k',
     likes: 4,
-    views: 47
+    downloads: 47
   },
   {
     id: 2,
     name: 'ERNIE 4.5',
-    description: '文心大模型4.5是百度自主研发的新一代生态类模型，通过多个不同场景训练而成...',
+    description: '文心大模型4.5是百度自主研发的新一代通用大模型，通过多个维度提升模型能力...',
     tags: ['文心大模型', '大语言模型'],
-    author: '飞桨AI Studio',
-    usage: '71k',
+    otherTags: ['other'],
+    studio: '飞桨AI Studio',
+    views: '71k',
     likes: 217,
-    views: '8.1k'
+    downloads: '8.1k'
+  },
+  {
+    id: 3,
+    name: 'ERNIE 4.0 Turbo',
+    description: 'ERNIE 4.0 Turbo是百度自研的编码超大规模语言模型，综合效果表现出色，广泛适用于各种...',
+    tags: ['文心大模型', '大语言模型'],
+    otherTags: ['other'],
+    studio: '飞桨AI Studio',
+    views: '63.5k',
+    likes: 84,
+    downloads: '2.2k',
+    features: ['支持训练', '支持快速部署']
+  },
+  {
+    id: 4,
+    name: 'PP-OCRv3',
+    description: 'PP-OCRv3文字检测识别系统',
+    tags: ['基础模型', 'OCR', '文字检测'],
+    otherTags: ['...'],
+    studio: '飞桨',
+    views: '46.4k',
+    likes: 320,
+    downloads: '9.6k',
+    features: ['支持训练']
   }
 ])
+
+// 任务方向选项
+const taskDirections = [
+  { label: '热门任务', active: true },
+  { label: '多模态理解', active: false },
+  { label: '基础模型', active: false },
+  { label: '产业方案', active: false },
+  { label: '创意工坊', active: false }
+]
+
+// 应用场景选项
+const applicationScenarios = [
+  { label: '应用场景', active: true },
+  { label: '数据标注测试(11)', active: false },
+  { label: '光学字符识别(5)', active: false },
+  { label: '视觉分类(6)', active: false },
+  { label: '视觉分割(10)', active: false },
+  { label: '三维视觉(2)', active: false },
+  { label: '生成式(2)', active: false }
+]
+
+// 自然语言处理选项
+const nlpOptions = [
+  { label: '自然语言处理', active: true }
+]
+
+// 搜索关键词
+const searchKeyword = ref('')
+
+// 排序方式
+const sortOptions = [
+  { label: '按综合排序', value: 'comprehensive' },
+  { label: '按热度排序', value: 'popularity' },
+  { label: '按时间排序', value: 'time' }
+]
+const currentSort = ref('comprehensive')
+
+// 切换任务方向
+const toggleTaskDirection = (index) => {
+  taskDirections.forEach((item, i) => {
+    item.active = i === index
+  })
+}
+
+// 切换应用场景
+const toggleApplicationScenario = (index) => {
+  applicationScenarios.forEach((item, i) => {
+    item.active = i === index
+  })
+}
+
+// 搜索模型
+const searchModels = () => {
+  // 实际项目中这里会调用API进行搜索
+  console.log('搜索关键词:', searchKeyword.value)
+}
+
+// 更改排序方式
+const changeSort = (option) => {
+  currentSort.value = option.value
+  // 实际项目中这里会根据排序方式重新获取数据
+  console.log('排序方式:', currentSort.value)
+}
+
+// 创建模型
+const createModel = () => {
+  console.log('创建模型')
+  // 实际项目中这里会跳转到创建模型页面或打开创建模型对话框
+}
 </script>
 
 <template>
-  <div class="explore-container">
-    <!-- 顶部操作栏 -->
-    <div class="top-bar">
-      <el-button type="primary" class="create-btn">
-        <el-icon><Plus /></el-icon>创建模型
-      </el-button>
-      <div class="search-sort">
-        <el-input
-          v-model="searchQuery"
-          placeholder="请输入关键字搜索"
-          class="search-input"
-          :prefix-icon="Search"
-        />
-        <el-select v-model="sortBy" class="sort-select">
-          <el-option label="综合排序" value="综合排序" />
-          <el-option label="最新发布" value="最新发布" />
-          <el-option label="最多使用" value="最多使用" />
-        </el-select>
-      </div>
+  <div class="models-container">
+    <!-- 标题和创建按钮 -->
+    <div class="models-header">
+      <h1 class="models-title">模型库</h1>
+      <el-button type="primary" class="create-button" @click="createModel">创建模型</el-button>
     </div>
 
     <!-- 筛选区域 -->
     <div class="filter-section">
-      <div class="filter-group">
-        <span class="filter-label">任务方向：</span>
-        <el-radio-group v-model="taskTypes[0].value">
-          <el-radio-button v-for="type in taskTypes" :key="type.value" :label="type.value">
-            {{ type.label }}
-          </el-radio-button>
-        </el-radio-group>
+      <!-- 任务方向 -->
+      <div class="filter-row">
+        <div class="filter-tabs">
+          <div 
+            v-for="(item, index) in taskDirections" 
+            :key="'task-' + index"
+            class="filter-tab" 
+            :class="{ 'active': item.active }"
+            @click="toggleTaskDirection(index)"
+          >
+            <el-icon v-if="index === 0"><Star /></el-icon>
+            {{ item.label }}
+          </div>
+        </div>
       </div>
-      <div class="filter-group">
-        <span class="filter-label">应用场景：</span>
-        <el-radio-group v-model="applicationScenes[0].value">
-          <el-radio-button v-for="scene in applicationScenes" :key="scene.value" :label="scene.value">
-            {{ scene.label }}
-          </el-radio-button>
-        </el-radio-group>
+
+      <!-- 应用场景 -->
+      <div class="filter-row">
+        <div class="filter-tabs">
+          <div 
+            v-for="(item, index) in applicationScenarios" 
+            :key="'app-' + index"
+            class="filter-tab" 
+            :class="{ 'active': item.active }"
+            @click="toggleApplicationScenario(index)"
+          >
+            {{ item.label }}
+          </div>
+        </div>
+      </div>
+
+      <!-- 自然语言处理 -->
+      <div class="filter-row">
+        <div class="filter-tabs">
+          <div 
+            v-for="(item, index) in nlpOptions" 
+            :key="'nlp-' + index"
+            class="filter-tab" 
+            :class="{ 'active': item.active }"
+          >
+            {{ item.label }}
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 模型卡片网格 -->
+    <!-- 搜索和排序 -->
+    <div class="search-sort-section">
+      <div class="search-box">
+        <el-input
+          v-model="searchKeyword"
+          placeholder="请输入关键字搜索"
+          class="search-input"
+          :prefix-icon="Search"
+          @keyup.enter="searchModels"
+        />
+      </div>
+      <div class="sort-box">
+        <el-dropdown @command="changeSort">
+          <span class="sort-dropdown">
+            {{ sortOptions.find(option => option.value === currentSort).label }}
+            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item 
+                v-for="option in sortOptions" 
+                :key="option.value"
+                :command="option"
+              >
+                {{ option.label }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+    </div>
+
+    <!-- 模型列表 -->
     <div class="models-grid">
-      <el-card v-for="model in models" :key="model.id" class="model-card">
+      <el-card 
+        v-for="model in modelList" 
+        :key="model.id"
+        class="model-card"
+        shadow="hover"
+      >
         <div class="model-header">
-          <h3 class="model-name">{{ model.name }}</h3>
+          <h2 class="model-title">{{ model.name }}</h2>
         </div>
-        <p class="model-description">{{ model.description }}</p>
+        <div class="model-description">{{ model.description }}</div>
         <div class="model-tags">
-          <el-tag v-for="tag in model.tags" :key="tag" size="small" class="tag">
+          <el-tag 
+            v-for="(tag, index) in model.tags" 
+            :key="index"
+            size="small"
+            class="model-tag"
+          >
             {{ tag }}
           </el-tag>
+          <el-tag 
+            v-if="model.otherTags"
+            size="small"
+            class="model-tag other-tag"
+          >
+            {{ model.otherTags[0] }}
+          </el-tag>
+        </div>
+        <div class="model-features" v-if="model.features">
+          <span 
+            v-for="(feature, index) in model.features" 
+            :key="index"
+            class="feature-item"
+          >
+            <span class="feature-dot"></span>
+            {{ feature }}
+          </span>
         </div>
         <div class="model-footer">
-          <div class="author">
-            <el-avatar :size="24" class="author-avatar">{{ model.author[0] }}</el-avatar>
-            <span>{{ model.author }}</span>
+          <div class="model-author">
+            <el-avatar size="small" class="author-avatar">{{ model.studio.charAt(0) }}</el-avatar>
+            <span class="author-name">{{ model.studio }}</span>
           </div>
-          <div class="stats">
-            <span><el-icon><View /></el-icon> {{ model.views }}</span>
-            <span><el-icon><Star /></el-icon> {{ model.likes }}</span>
-            <span><el-icon><Download /></el-icon> {{ model.usage }}</span>
+          <div class="model-stats">
+            <span class="stat-item">
+              <el-icon><View /></el-icon>
+              {{ model.views }}
+            </span>
+            <span class="stat-item">
+              <el-icon><Star /></el-icon>
+              {{ model.likes }}
+            </span>
+            <span class="stat-item">
+              <el-icon><Download /></el-icon>
+              {{ model.downloads }}
+            </span>
           </div>
         </div>
       </el-card>
@@ -119,123 +282,213 @@ const models = ref([
 </template>
 
 <style scoped>
-.explore-container {
+.models-container {
   padding: 20px;
   background-color: #f5f7fa;
+  min-height: 100vh;
 }
 
-.top-bar {
+.models-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.create-btn {
+.models-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.create-button {
+  background-color: #4e6ef2;
+  border-color: #4e6ef2;
+}
+
+.filter-section {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.filter-row {
+  margin-bottom: 15px;
+}
+
+.filter-row:last-child {
+  margin-bottom: 0;
+}
+
+.filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-tab {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: #f5f7fa;
+  color: #606266;
+}
+
+.filter-tab.active {
+  background-color: #ecf5ff;
+  color: #409eff;
   font-weight: 500;
 }
 
-.search-sort {
+.filter-tab .el-icon {
+  margin-right: 4px;
+  font-size: 14px;
+}
+
+.search-sort-section {
   display: flex;
-  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .search-input {
   width: 300px;
 }
 
-.filter-section {
-  background-color: white;
-  padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.filter-group {
+.sort-dropdown {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
-}
-
-.filter-group:last-child {
-  margin-bottom: 0;
-}
-
-.filter-label {
+  cursor: pointer;
   color: #606266;
-  margin-right: 12px;
-  min-width: 70px;
+  font-size: 14px;
 }
 
 .models-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
 
 .model-card {
-  transition: transform 0.2s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
 }
 
 .model-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px);
 }
 
 .model-header {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-.model-name {
-  margin: 0;
+.model-title {
   font-size: 18px;
-  font-weight: 600;
-  color: #303133;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
 }
 
 .model-description {
-  color: #606266;
   font-size: 14px;
-  line-height: 1.5;
-  margin-bottom: 12px;
+  color: #606266;
+  margin-bottom: 15px;
+  flex-grow: 1;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .model-tags {
-  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
 }
 
-.tag {
-  margin-right: 8px;
-  margin-bottom: 8px;
+.model-tag {
+  background-color: #f0f2f5;
+  color: #606266;
+  border: none;
+}
+
+.other-tag {
+  background-color: #f0f2f5;
+  color: #909399;
+}
+
+.model-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+  font-size: 13px;
+  color: #67c23a;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+}
+
+.feature-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #67c23a;
+  margin-right: 6px;
 }
 
 .model-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #ebeef5;
 }
 
-.author {
+.model-author {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #606266;
-  font-size: 14px;
 }
 
-.stats {
-  display: flex;
-  gap: 16px;
-  color: #909399;
+.author-avatar {
+  margin-right: 8px;
+  background-color: #409eff;
+}
+
+.author-name {
   font-size: 13px;
+  color: #606266;
 }
 
-.stats span {
+.model-stats {
+  display: flex;
+  gap: 12px;
+}
+
+.stat-item {
   display: flex;
   align-items: center;
-  gap: 4px;
+  font-size: 13px;
+  color: #909399;
+}
+
+.stat-item .el-icon {
+  margin-right: 4px;
+  font-size: 14px;
 }
 </style>

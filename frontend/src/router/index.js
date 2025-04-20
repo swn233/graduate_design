@@ -3,6 +3,12 @@ import {unauthorized} from "@/net/index.js";
 const router=createRouter({
     history:createWebHistory(import.meta.env.BASE_URL),
     routes:[
+    {
+      path: '/article/:id',
+      name: 'ArticleDetail',
+      component: () => import('../views/article/ArticleDetail.vue'),
+      props: true
+    },
         {
             path:'/',
             name:'welcome',
@@ -27,7 +33,13 @@ const router=createRouter({
             path:'/index',
             name:'index',
             component:()=>import('../views/indexView.vue')
-        }
+        },
+            {
+                path:'/write',
+                name:'write',
+                component:()=>import('../views/write/WriteArticle.vue')
+            }
+        
     ]
 })
 router.beforeEach((to,from,next)=>{

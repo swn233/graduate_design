@@ -3,6 +3,11 @@ import {logout, takeRole,takeUsername} from "@/net/index.js";
 import router from "@/router/index.js";
 import { ref, onMounted } from 'vue';
 import ExploreIndex from './explore/exploreIndex.vue';
+import LearnIndex from './learn/learnIndex.vue';
+import MyProjects from './my/myProjects.vue';
+import MyApps from './my/myApps.vue';
+import MyData from './my/myData.vue';
+import MyModels from './my/myModels.vue';
 import {
   Menu as IconMenu,
   Location as IconLocation,
@@ -121,11 +126,31 @@ onMounted(() => {
           <span>学习</span>
         </el-menu-item>
         
-        <el-divider style="margin: 8px 0; border-color: rgba(255, 255, 255, 0.1);" />
-        
-        <el-menu-item index="my">
+        <el-divider style="margin: 8px 0; border-color: rgba(255, 255, 255, 0.1);" />        
+        <!-- 我的分类标题 -->
+        <div class="menu-category">
           <el-icon><icon-user /></el-icon>
-          <span>我的</span>
+          <span v-if="!isCollapse">我的</span>
+        </div>
+        
+        <el-menu-item index="my-projects">
+          <el-icon><icon-document /></el-icon>
+          <span>项目</span>
+        </el-menu-item>
+        
+        <el-menu-item index="my-apps">
+          <el-icon><icon-menu /></el-icon>
+          <span>应用</span>
+        </el-menu-item>
+        
+        <el-menu-item index="my-data">
+          <el-icon><icon-location /></el-icon>
+          <span>数据</span>
+        </el-menu-item>
+        
+        <el-menu-item index="my-models">
+          <el-icon><icon-setting /></el-icon>
+          <span>模型</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -135,14 +160,28 @@ onMounted(() => {
          <!-- 探索页面 -->
         <explore-index v-if="activeIndex === 'explore'" :is-collapse="isCollapse" />
         
-        <div v-else-if="activeIndex === 'learn'">
-          <h2>学习页面</h2>
-          <p>这里是PAIC人工智能案例平台的学习页面，您可以在这里学习AI相关知识。</p>
-        </div>
+        <learn-index v-else-if="activeIndex === 'learn'" :is-collapse="isCollapse" />
         
-        <div v-else-if="activeIndex === 'my'">
-          <h2>我的页面</h2>
-          <p>这里是PAIC人工智能案例平台的个人页面，您可以在这里管理您的个人信息和案例。</p>
+        <div v-else-if="activeIndex.startsWith('my-')">
+          <!-- 我的项目页面 -->
+          <div v-if="activeIndex === 'my-projects'">
+            <my-projects :is-collapse="isCollapse" />
+          </div>
+          
+          <!-- 我的应用页面 -->
+          <div v-else-if="activeIndex === 'my-apps'">
+            <my-apps :is-collapse="isCollapse" />
+          </div>
+          
+          <!-- 我的数据页面 -->
+          <div v-else-if="activeIndex === 'my-data'">
+            <my-data :is-collapse="isCollapse" />
+          </div>
+          
+          <!-- 我的模型页面 -->
+          <div v-else-if="activeIndex === 'my-models'">
+            <my-models :is-collapse="isCollapse" />
+          </div>
         </div>
       </el-main>
   </el-container>
@@ -285,5 +324,25 @@ onMounted(() => {
 .header-left {
   display: flex;
   align-items: left;
+}
+
+.menu-category {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 40px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 14px;
+  cursor: default;
+  transition: all 0.1s;
+}
+
+.menu-category .el-icon {
+  margin-right: 5px;
+}
+
+.el-menu--collapse .menu-category {
+  padding: 0;
+  justify-content: center;
 }
 </style>

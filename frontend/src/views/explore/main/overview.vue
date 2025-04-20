@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Search, View, Picture, Star } from '@element-plus/icons-vue'
-import { fetchCarouselArticles } from '@/net/article'
+import { get } from '@/net'
 
 const props = defineProps({
   isCollapse: {
@@ -16,15 +16,11 @@ const searchQuery = ref('')
 const carouselItems = ref([])
 
 // 获取轮播图数据
-const loadCarouselData = async () => {
-  try {
-    const response = await fetchCarouselArticles()
-    console.log('完整接口响应:', response)
-    carouselItems.value = response
-    console.log('处理后的轮播数据:', carouselItems.value)
-  } catch (error) {
-    console.error('获取轮播图数据失败:', error)
-  }
+const loadCarouselData =  () => {
+  get('/api/article/all', (data) => {
+        console.log('获取轮播图文章列表成功', data)
+        carouselItems.value = data
+    })
 }
 
 // 在组件挂载时获取数据
@@ -92,6 +88,10 @@ const cases = ref([
     views: 2045
   }
 ])
+const handleCarouselClick = (id) => {
+  window.open(`/article/${id}`, "_blank")
+  console.log('点击了轮播图', id)
+}
 </script>
 
 <template>
@@ -111,7 +111,7 @@ const cases = ref([
     <!-- 轮播图部分 -->
     <div class="carousel-section">
       <el-carousel :interval="4000" type="card" height="200px">
-        <el-carousel-item v-for="item in carouselItems" :key="item.id">
+        <el-carousel-item v-for="item in carouselItems" :key="item.id" @click="handleCarouselClick(item.id)">
           <div class="carousel-content" :style="{backgroundImage: `url(${item.image})`}">
             <h3 class="carousel-title">{{ item.title }}</h3>
           </div>

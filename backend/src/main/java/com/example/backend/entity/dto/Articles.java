@@ -27,4 +27,10 @@ public class Articles implements BaseData {
     private Integer recentSevenDaysLikes;
     // 文章评论，对应数据库表中的 comments 字段
     private String comments;
+
+    private String author;
+    private String publish_time;
+    private String view_count;
+    private String recent_likes;
+
 }

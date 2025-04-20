@@ -9,6 +9,7 @@ const article = ref({})
 const loadArticle = () => {
   get(`/api/article/${route.params.id}`, data => {
     article.value = data
+    console.log("publishtime",data.publish_time)
     document.title = data.title + ' - AI应用平台'
   })
 }
@@ -30,9 +31,9 @@ onMounted(() => {
       <h1 class="article-title">{{ article.title }}</h1>
       <div class="article-meta">
         <span>作者：{{ article.author }}</span>
-        <span>发布时间：{{ article.createTime }}</span>
-        <span>浏览：{{ article.views }}</span>
-        <span>最近点赞：{{ article.recent_seven_days_likes }}</span>
+        <span>发布时间：{{ article.publish_time }}</span>
+        <span>浏览：{{ article.view_count }}</span>
+        <span>最近点赞：{{ article.recent_likes }}</span>
       </div>
     </header>
     <el-divider />

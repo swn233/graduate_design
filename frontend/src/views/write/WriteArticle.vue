@@ -12,7 +12,6 @@ const article = reactive({
 })
 
 // 编辑器状态
-const isPreview = ref(false)
 const isSaving = ref(false)
 
 // 标签输入
@@ -20,10 +19,7 @@ const tagInputVisible = ref(false)
 const tagInputValue = ref('')
 const tagInputRef = ref(null)
 
-// 切换预览模式
-const togglePreview = () => {
-  isPreview.value = !isPreview.value
-}
+
 
 // 保存文章
 const saveArticle = () => {
@@ -152,11 +148,13 @@ const insertMarkdown = (syntax) => {
   setTimeout(() => {
     textarea.focus()
     if (text.substring(start, end)) {
-      textarea.setSelectionRange(start, start + insertion.length)
+      // 有选中文本时，选中插入的全部内容
+      textarea.setSelectionRange(start, start + insertion.length);
     } else {
-      textarea.setSelectionRange(newCursorPos, insertion.length - (insertion.length - newCursorPos) + start)
+      // 无选中文本时，将光标移动到预设位置
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
     }
-  })
+  });
 }
 </script>
 
@@ -165,22 +163,7 @@ const insertMarkdown = (syntax) => {
     <!-- 顶部工具栏 -->
     <div class="toolbar">
       <div class="left-tools">
-        <el-button-group>
-          <el-tooltip content="预览" placement="bottom">
-            <el-button :type="isPreview ? 'primary' : 'default'" @click="togglePreview">
-              <el-icon><Document /></el-icon>
-            </el-button>
-          </el-tooltip>
-          <el-tooltip content="编辑" placement="bottom">
-            <el-button :type="!isPreview ? 'primary' : 'default'" @click="togglePreview">
-              <el-icon><Edit /></el-icon>
-            </el-button>
-          </el-tooltip>
-        </el-button-group>
-        
-        <el-divider direction="vertical" />
-        
-        <template v-if="!isPreview">
+        <template>
           <el-button-group class="markdown-tools">
             <el-tooltip content="标题" placement="bottom">
               <el-button @click="insertMarkdown('heading')">
@@ -290,7 +273,7 @@ const insertMarkdown = (syntax) => {
     
     <!-- 编辑器和预览区域 -->
     <div class="editor-container">
-      <div v-if="!isPreview" class="markdown-editor-wrapper">
+      <div class="markdown-editor-wrapper">
         <textarea
           id="markdown-editor"
           v-model="article.content"
@@ -298,7 +281,7 @@ const insertMarkdown = (syntax) => {
           placeholder="请输入文章内容，支持 Markdown 格式..."
         ></textarea>
       </div>
-      <div v-else class="markdown-preview">
+      <div class="markdown-preview">
         <div v-if="article.content" v-html="renderMarkdown(article.content)" class="preview-content"></div>
         <div v-else class="empty-preview">预览区域为空，请先编写内容</div>
       </div>
@@ -446,6 +429,7 @@ export default {
 
 .editor-container {
   display: flex;
+  flex-direction: row;
   height: 500px;
   border: 1px solid #dcdfe6;
   border-radius: 4px;
@@ -453,8 +437,9 @@ export default {
 }
 
 .markdown-editor-wrapper {
-  width: 100%;
+  width: 50%;
   height: 100%;
+  border-right: 1px solid #dcdfe6;
 }
 
 .markdown-editor {
@@ -470,7 +455,7 @@ export default {
 }
 
 .markdown-preview {
-  width: 100%;
+  width: 50%;
   height: 100%;
   padding: 15px;
   overflow-y: auto;
