@@ -1,9 +1,12 @@
 package com.example.backend.entity.dto;
 
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.example.backend.entity.BaseData;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,18 +22,16 @@ public class Articles implements BaseData {
     private String title;
     // 文章配图链接，对应数据库表中的 image 字段
     private String image;
-    // 文章链接，对应数据库表中的 link 字段
-    private String link;
     // 文章内容，对应数据库表中的 content 字段
     private String content;
     // 最近七日点赞数，对应数据库表中的 recent_seven_days_likes 字段
     private Integer recentSevenDaysLikes;
     // 文章评论，对应数据库表中的 comments 字段
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private String comments;
-
     private String author;
-    private String publish_time;
-    private String view_count;
-    private String recent_likes;
+    private Date publish_time;
+    private Integer view_count;
+    private Integer recent_likes;
 
 }

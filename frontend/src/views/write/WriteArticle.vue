@@ -13,6 +13,8 @@ const article = reactive({
 
 // 编辑器状态
 const isSaving = ref(false)
+const isEditorScrolling = ref(false)
+const isPreviewScrolling = ref(false)
 
 // 标签输入
 const tagInputVisible = ref(false)
@@ -87,6 +89,7 @@ const handleTagClose = (tag) => {
 
 // 处理图片上传
 const handleImageUpload = (event) => {
+  console.log("触发了")
   const file = event.target.files[0]
   if (file) {
     // 在实际应用中，这里应该上传图片到服务器
@@ -156,6 +159,29 @@ const insertMarkdown = (syntax) => {
     }
   });
 }
+
+// 处理编辑器滚动
+const handleEditorScroll = (e) => {
+  if (isPreviewScrolling.value) return
+  isEditorScrolling.value = true
+  const editor = e.target
+  const preview = document.querySelector('.markdown-preview')
+  const percentage = editor.scrollTop / (editor.scrollHeight - editor.clientHeight)
+  preview.scrollTop = percentage * (preview.scrollHeight - preview.clientHeight)
+  setTimeout(() => isEditorScrolling.value = false, 100)
+}
+
+// 处理预览区滚动
+const handlePreviewScroll = (e) => {
+  if (isEditorScrolling.value) return
+  isPreviewScrolling.value = true
+  const preview = e.target
+  const editor = document.getElementById('markdown-editor')
+  const percentage = preview.scrollTop / (preview.scrollHeight - preview.clientHeight)
+  editor.scrollTop = percentage * (editor.scrollHeight - editor.clientHeight)
+  setTimeout(() => isPreviewScrolling.value = false, 100)
+}
+
 </script>
 
 <template>
@@ -279,9 +305,10 @@ const insertMarkdown = (syntax) => {
           v-model="article.content"
           class="markdown-editor"
           placeholder="请输入文章内容，支持 Markdown 格式..."
+          @scroll="handleEditorScroll"
         ></textarea>
       </div>
-      <div class="markdown-preview">
+      <div class="markdown-preview" @scroll="handlePreviewScroll">
         <div v-if="article.content" v-html="renderMarkdown(article.content)" class="preview-content"></div>
         <div v-else class="empty-preview">预览区域为空，请先编写内容</div>
       </div>
@@ -430,7 +457,7 @@ export default {
 .editor-container {
   display: flex;
   flex-direction: row;
-  height: 500px;
+  height: 100vh;
   border: 1px solid #dcdfe6;
   border-radius: 4px;
   overflow: hidden;

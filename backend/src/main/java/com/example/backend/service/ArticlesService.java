@@ -2,6 +2,8 @@ package com.example.backend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.backend.entity.dto.Articles;
+import com.example.backend.entity.vo.request.ArticlesWriteVO;
+
 import java.util.List;
 
 public interface ArticlesService extends IService<Articles>{
@@ -18,4 +20,12 @@ public interface ArticlesService extends IService<Articles>{
      * @return 文章列表
      */
     List<Articles> getAllArticles();
+
+    /**
+     * 保存文章
+     *
+     * @param article 文章实体
+     * @return 保存结果
+     */
+    String saveArticleByVO(ArticlesWriteVO vo);
 }

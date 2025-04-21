@@ -14,6 +14,21 @@ const loadArticle = () => {
   })
 }
 
+// 引入markdown-it库进行Markdown渲染
+import MarkdownIt from 'markdown-it'
+
+const md = new MarkdownIt({
+  html: true,        // 允许HTML标签
+  breaks: true,      // 转换\n为<br>
+  linkify: true,     // 自动转换URL为链接
+  typographer: true  // 启用一些语言中立的替换和引号美化
+})
+
+function renderMarkdown(text) {
+  return md.render(text || '')
+}
+
+
 onMounted(() => {
   loadArticle()
 })
@@ -38,7 +53,10 @@ onMounted(() => {
     </header>
     <el-divider />
     
-    <div class="article-content" v-html="article.content" />
+    <div class="markdown-preview" >
+        <div v-if="article.content" v-html="renderMarkdown(article.content)" class="preview-content"></div>
+        <div v-else class="empty-preview">预览区域为空，请先编写内容</div>
+      </div>
     <article-comments v-if="article.comments" :comments="article.comments" />
   </div>
 </template>
@@ -92,5 +110,31 @@ onMounted(() => {
   height: auto;
   margin: 10px 0;
   border-radius: 4px;
+}
+
+.markdown-preview {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #fafafa;
+}
+
+.markdown-preview :deep(div) {
+  max-width: 800px;
+  width: 100%;
+}
+
+.markdown-preview :deep(*) {
+  text-align: center;
+  max-width: 100%;
+}
+
+.markdown-preview :deep(img),
+.markdown-preview :deep(pre) {
+  margin: 20px auto;
+  display: block;
 }
 </style>
