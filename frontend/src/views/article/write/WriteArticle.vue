@@ -61,12 +61,22 @@ const publishArticle = () => {
     ElMessage.warning('请输入文章内容')
     return
   }
+
+  if (!article.image) {
+    ElMessage.warning('请上传文章封面')
+    return
+  }
   
+  const articleData = {
+    title: article.title,
+    content: article.content,
+    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=200&fit=crop&q=80',
+    author:'test'
+  }
   // 这里应该调用API发布文章
-  // 模拟API调用
-  setTimeout(() => {
+  post('/api/article/save',articleData,()=>{
     ElMessage.success('文章发布成功')
-  }, 1000)
+  } )
 }
 
 // 处理标签相关操作
@@ -193,8 +203,7 @@ const handlePreviewScroll = (e) => {
   <div class="write-container">
     <!-- 顶部工具栏 -->
     <div class="toolbar">
-      <div class="left-tools">
-        <template>
+      <div class="left-tools">     
           <el-button-group class="markdown-tools">
             <el-tooltip content="标题" placement="bottom">
               <el-button @click="insertMarkdown('heading')">
@@ -232,7 +241,6 @@ const handlePreviewScroll = (e) => {
               </el-button>
             </el-tooltip>
           </el-button-group>
-        </template>
       </div>
       
       <div class="right-tools">
@@ -324,6 +332,7 @@ const handlePreviewScroll = (e) => {
 <script>
 // 引入markdown-it库进行Markdown渲染
 import MarkdownIt from 'markdown-it'
+import { post } from '@/net'
 
 const md = new MarkdownIt({
   html: true,        // 允许HTML标签
