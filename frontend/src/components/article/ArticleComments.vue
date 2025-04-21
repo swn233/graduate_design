@@ -31,7 +31,7 @@ const props = defineProps({
 
 <style scoped>
 .comments-section {
-  margin-top: 40px;
+  margin-top: 0px;
   padding: 20px;
   background: #f8f9fa;
   border-radius: 8px;

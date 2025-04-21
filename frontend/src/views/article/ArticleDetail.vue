@@ -54,7 +54,7 @@ onMounted(() => {
     <el-divider />
     
     <div class="markdown-preview" >
-        <div v-if="article.content" v-html="renderMarkdown(article.content)" class="preview-content"></div>
+        <div v-if="article.content" v-html="renderMarkdown(article.content)" class="article-content"></div>
         <div v-else class="empty-preview">预览区域为空，请先编写内容</div>
       </div>
     <article-comments v-if="article.comments" :comments="article.comments" />
@@ -63,10 +63,11 @@ onMounted(() => {
 
 <style scoped>
 .article-container {
-  max-width: 1200px;
+  
   margin: 20px auto;
   padding: 0px;
   margin-top: 0px;
+  align-items: center;
 }
 
 .article-title {
@@ -88,11 +89,14 @@ onMounted(() => {
 .article-content {
   line-height: 1.8;
   font-size: 16px;
-  padding: 20px;
+  margin: 8px;
+  padding: 8px;
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);  /* 调整阴影参数 */
+  width: 100%;
 }
+
 
 .article-content :deep(p) {
   margin: 1em 0;
@@ -113,23 +117,32 @@ onMounted(() => {
 }
 
 .markdown-preview {
-  width: 100%;
+  
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 15px;
+  overflow-x: hidden;  
   overflow-y: auto;
   background-color: #fafafa;
 }
 
 .markdown-preview :deep(div) {
-  max-width: 800px;
+  max-width: 100%;    
   width: 100%;
 }
 
 .markdown-preview :deep(*) {
-  text-align: center;
   max-width: 100%;
+  text-align: left;   
+}
+
+.markdown-preview :deep(pre),
+.markdown-preview :deep(code) {
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .markdown-preview :deep(img),

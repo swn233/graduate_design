@@ -497,6 +497,7 @@ export default {
   color: #909399;
   text-align: center;
   margin-top: 200px;
+
 }
 
 /* 预览区域样式 */
