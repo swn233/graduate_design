@@ -20,6 +20,11 @@ const isPreviewScrolling = ref(false)
 const tagInputVisible = ref(false)
 const tagInputValue = ref('')
 const tagInputRef = ref(null)
+const fileInputRef = ref(null)
+
+const triggerFileInput = () => {
+  fileInputRef.value?.click()
+}
 
 
 
@@ -262,11 +267,11 @@ const handlePreviewScroll = (e) => {
         </div>
       </div>
       <div v-else class="upload-container">
-        <el-button type="primary" plain>
+        <el-button type="primary" plain @click="triggerFileInput">
           <el-icon><Upload /></el-icon>
           <span>上传封面图片</span>
-          <input type="file" class="file-input" accept="image/*" @change="handleImageUpload" />
         </el-button>
+        <input ref="fileInputRef" type="file" class="file-input" accept="image/*" @change="handleImageUpload" />
         <div class="upload-tip">建议尺寸: 1200 x 400 像素，JPG/PNG 格式</div>
       </div>
     </div>
@@ -422,9 +427,9 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
   opacity: 0;
+  width: 0%;
+  height: 0%;
   cursor: pointer;
 }
 
