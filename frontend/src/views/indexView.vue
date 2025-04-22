@@ -8,6 +8,7 @@ import MyProjects from './my/myProjects.vue';
 import MyApps from './my/myApps.vue';
 import MyData from './my/myData.vue';
 import MyModels from './my/myModels.vue';
+import ArticleIndex from './article/articleIndex.vue';
 import {
   Menu as IconMenu,
   Location as IconLocation,
@@ -152,37 +153,30 @@ onMounted(() => {
           <el-icon><icon-setting /></el-icon>
           <span>模型</span>
         </el-menu-item>
+
+        <el-menu-item index="my-articles">
+          <el-icon><icon-document /></el-icon>
+          <span>文章</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <!-- 主内容区 -->
       <el-main style="margin: 0px;padding: 0px;height: 100vh;">
-        <!-- 根据选择的菜单项显示不同的内容 -->
-         <!-- 探索页面 -->
-        <explore-index v-if="activeIndex === 'explore'" :is-collapse="isCollapse" />
-        
-        <learn-index v-else-if="activeIndex === 'learn'" :is-collapse="isCollapse" />
-        
-        <div v-else-if="activeIndex.startsWith('my-')">
-          <!-- 我的项目页面 -->
-          <div v-if="activeIndex === 'my-projects'">
-            <my-projects :is-collapse="isCollapse" />
-          </div>
-          
-          <!-- 我的应用页面 -->
-          <div v-else-if="activeIndex === 'my-apps'">
-            <my-apps :is-collapse="isCollapse" />
-          </div>
-          
-          <!-- 我的数据页面 -->
-          <div v-else-if="activeIndex === 'my-data'">
-            <my-data :is-collapse="isCollapse" />
-          </div>
-          
-          <!-- 我的模型页面 -->
-          <div v-else-if="activeIndex === 'my-models'">
-            <my-models :is-collapse="isCollapse" />
-          </div>
-        </div>
+        <keep-alive>
+          <transition name="fade" mode="out-in">
+            <component :is="activeIndex">
+              <explore-index v-if="activeIndex === 'explore'" :is-collapse="isCollapse" />
+              <learn-index v-else-if="activeIndex === 'learn'" :is-collapse="isCollapse" />
+              <div v-else-if="activeIndex.startsWith('my-')">
+                <my-projects v-if="activeIndex === 'my-projects'" :is-collapse="isCollapse" />
+                <my-apps v-else-if="activeIndex === 'my-apps'" :is-collapse="isCollapse" />
+                <my-data v-else-if="activeIndex === 'my-data'" :is-collapse="isCollapse" />
+                <my-models v-else-if="activeIndex === 'my-models'" :is-collapse="isCollapse" />
+                <article-index v-else-if="activeIndex === 'my-articles'" :is-collapse="isCollapse" />
+              </div>
+            </component>
+          </transition>
+        </keep-alive>
       </el-main>
   </el-container>
   </el-container>
@@ -345,4 +339,20 @@ onMounted(() => {
   padding: 0;
   justify-content: center;
 }
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease;
+  transform: translateY(0);
+}
+
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
 </style>

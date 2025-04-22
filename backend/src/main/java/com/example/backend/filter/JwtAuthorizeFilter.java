@@ -22,7 +22,7 @@ public class JwtAuthorizeFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorization=request.getHeader("Authorization");
+        String authorization=getTokenFromRequest(request);
         DecodedJWT jwt= utils.resolveJwt(authorization);
         if (jwt!=null){
             UserDetails user= utils.toUser(jwt);
@@ -33,4 +33,23 @@ public class JwtAuthorizeFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request,response);
     }
+   
+
+private String getTokenFromRequest(HttpServletRequest request) {
+    // 优先从Header获取
+    String header = request.getHeader("Authorization");
+    if (header != null && header.startsWith("Bearer ")) {
+        return header;
+    }
+    
+    // 从URL参数获取
+    String token = request.getParameter("token");
+    if (token != null && !token.isBlank()) {
+        return token;
+    }
+    
+    return null;
+}
+
+
 }

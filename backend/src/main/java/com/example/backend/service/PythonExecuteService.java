@@ -11,7 +11,6 @@ public class PythonExecuteService {
         try {
             ProcessBuilder pb = new ProcessBuilder("/opt/homebrew/anaconda3/bin/python", "-c", code);
             System.out.println("后端python执行");
-            System.out.println("后端python执行");
             pb.redirectErrorStream(true);
             Process process = pb.start();
 

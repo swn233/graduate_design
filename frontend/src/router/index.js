@@ -37,7 +37,13 @@ const router=createRouter({
             {
                 path:'/write',
                 name:'write',
-                component:()=>import('../views/write/WriteArticle.vue')
+                component:()=>import('@/views/article/write/WriteArticle.vue')
+            }
+            ,
+            {
+                path:'/notebook',
+                name:'notebook',
+                component:()=>import('@/views/explore/components/NotebookView.vue')
             }
         
     ]

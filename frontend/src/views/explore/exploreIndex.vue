@@ -46,17 +46,19 @@ const activeMenu = ref('overview')
 
     <!-- 主内容区 -->
     <div class="explore-content">
-      <!-- 概览内容 -->
-      <Overview v-if="activeMenu === 'overview'" :isCollapse="props.isCollapse" />
+      <transition name="fade" mode="out-in">
+        <!-- 概览内容 -->
+        <Overview v-if="activeMenu === 'overview'" :isCollapse="props.isCollapse" key="overview" />
 
-      <!-- 数据集内容 -->
-      <Datasets v-else-if="activeMenu === 'datasets'" :isCollapse="props.isCollapse" />
+        <!-- 数据集内容 -->
+        <Datasets v-else-if="activeMenu === 'datasets'" :isCollapse="props.isCollapse" key="datasets" />
 
-      <!-- 模型库内容 -->
-      <Models v-else-if="activeMenu === 'models'" :isCollapse="props.isCollapse" />
+        <!-- 模型库内容 -->
+        <Models v-else-if="activeMenu === 'models'" :isCollapse="props.isCollapse" key="models" />
 
-      <!-- 体验中心内容 -->
-      <Experience v-else-if="activeMenu === 'experience'" :isCollapse="props.isCollapse" />
+        <!-- 体验中心内容 -->
+        <Experience v-else-if="activeMenu === 'experience'" :isCollapse="props.isCollapse" key="experience" />
+      </transition>
     </div>
   </div>
 </template>
@@ -339,5 +341,21 @@ const activeMenu = ref('overview')
 .el-menu--collapse .menu-text {
   opacity: 0;
   transform: translateX(10px);
+}
+
+/* 过渡动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>

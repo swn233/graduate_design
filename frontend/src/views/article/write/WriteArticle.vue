@@ -332,7 +332,7 @@ const handlePreviewScroll = (e) => {
 <script>
 // 引入markdown-it库进行Markdown渲染
 import MarkdownIt from 'markdown-it'
-import { post } from '@/net'
+import { post } from '@/net/index.js'
 
 const md = new MarkdownIt({
   html: true,        // 允许HTML标签
