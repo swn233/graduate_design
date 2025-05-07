@@ -1,0 +1,90 @@
+# 1. Version control
+.git/
+.gitignore
+.svn/
+.hg/
+
+# 2. IDE/editor files
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+
+# 3. OS/desktop files
+.DS_Store
+Thumbs.db
+
+# 4. Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# 5. Java
+# Exclude build output, but keep .mvn and mvnw as per instructions
+# (do NOT ignore .mvn/ or mvnw)
+target/
+*.class
+*.jar
+*.war
+*.ear
+.gradle/
+
+# 6. Build outputs (JS, Vue, etc.)
+dist/
+build/
+out/
+
+# 7. Test and debug artifacts
+test/
+tests/
+coverage/
+*.log
+debug/
+
+# 8. Python (not detected, but for completeness)
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+
+# 9. Go (not detected, but for completeness)
+/vendor/
+*.test
+.go-cache/
+
+# 10. Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+
+# 11. Documentation and markdown
+docs/
+*.md
+README*
+
+# 12. Docker and Compose files
+Dockerfile*
+docker-compose*
+
+# 13. Temporary and local files
+tmp/
+temp/
+*.tmp
+.local/
+local/
+
+# 14. Project-specific
+# (No additional project-specific patterns detected)
+
+# 15. Miscellaneous
+*.bak
+*.old
+
+# End of .dockerignore

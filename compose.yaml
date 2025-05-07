@@ -1,0 +1,56 @@
+services:
+  java-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: java-backend
+    restart: unless-stopped
+    init: true
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    # env_file: ./.env  # Uncomment if .env file exists in ./backend
+    # The backend may require a database or message broker (see below)
+
+  js-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: js-frontend
+    restart: unless-stopped
+    init: true
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
+    # env_file: ./.env  # Uncomment if .env file exists in ./frontend
+    depends_on:
+      - java-backend
+    # The frontend expects the backend to be available at http://localhost:8080
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"   # AMQP protocol
+      - "15672:15672" # Management UI
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Uncomment the following lines to persist RabbitMQ data
+    # volumes:
+    #   - rabbitmq-data:/var/lib/rabbitmq
+
+networks:
+  app-network:
+    driver: bridge
+
+# Uncomment the following if you want to persist RabbitMQ data
+#volumes:
+#  rabbitmq-data:
