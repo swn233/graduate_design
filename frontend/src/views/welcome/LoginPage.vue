@@ -1,6 +1,6 @@
 <script setup>
 import {ref}from 'vue'
-
+import { takeRole} from "@/net/index.js";
 import router from "@/router"
 import {login} from "@/net/index.js";
 
@@ -26,8 +26,11 @@ function userLogin(){
     if (valid)
       login(form.value.username,form.value.password,form.value.remember,
     ()=>{
+      const role = JSON.parse(takeRole());
+      if (role === 'admin')
+        router.push('/manage')
+      else
       router.push('/index')
-      
     })
   })
 }

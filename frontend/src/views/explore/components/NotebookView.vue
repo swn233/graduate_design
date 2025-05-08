@@ -1,14 +1,15 @@
 <template>
   <el-container class="notebook-container">
     <el-main class="editor-container">
-      <el-card class="code-card">
+      <div class="code-div">
         <div ref="editorEl" class="code-editor"/>
-      </el-card>
-      <el-card class="output-card">
+      </div>
+      <div class="output-div">
         <div class="output-panel">
-          <pre>{{ output }}</pre>
+          <el-text type="info" size="large">执行结果：</el-text>
+          <pre class="result">{{ output }}</pre>
         </div>
-      </el-card>
+      </div>
     </el-main>
     <el-footer class="toolbar">
       <el-button 
@@ -25,6 +26,7 @@
 
 <script setup>
 import { ref, onMounted,onUnmounted } from 'vue';
+import { ElText } from 'element-plus';
 import { basicSetup } from 'codemirror';
 import { EditorView } from '@codemirror/view';
 import { python } from '@codemirror/lang-python';
@@ -48,7 +50,7 @@ const executeCode = async () => {
 
   const ws = new WebSocket(`ws://localhost:8080/ws/python?token=${token.Authorization}`);
   ws.onmessage = (event) => {
-    output.value += event.data + '\n';
+    output.value = event.data + '\n';
   };
   
   ws.onopen = () => {
@@ -80,23 +82,35 @@ onUnmounted(() => {
   height: 100vh;
 }
 .editor-container {
-  display: flex;
-  gap: 15px;
+
+  flex-direction: column;
+  gap: 20px;
   padding: 20px;
+  height: calc(100vh - 70px);
 }
-.code-card,
-.output-card {
-  flex: 1;
+.code-div,
+.output-div {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
-.code-editor {
-  height: 65vh;
+.code-div,.output-div {
+  overflow: scroll;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid var(--el-border-color-light);
+}
+
+.code-div,.output-div {
+  display: flex;
+  flex-direction: column;
 }
 .output-panel {
-  height: 65vh;
   padding: 10px;
   background: var(--el-bg-color-page);
   overflow: auto;
+  border-top: 1px solid var(--el-border-color-light);
+}
+.result {
+  margin: 0;
 }
 .toolbar {
   display: flex;

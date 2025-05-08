@@ -22,7 +22,6 @@ public class PythonExecuteService {
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
-
             int exitCode = process.waitFor();
             return "Exit Code: " + exitCode + "\nOutput:\n" + output.toString();
         } catch (Exception e) {

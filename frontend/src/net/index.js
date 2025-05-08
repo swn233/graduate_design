@@ -143,4 +143,8 @@ function logout(success,failure=defaultFailure){
     },failure)
 }
 
-export  {login,logout,get,post,accessHeader,takeRole,takeUsername}
+function deleteUser(id, success, failure = defaultFailure) {
+    post(`/api/account/delete/${id}`, {}, success, failure);
+}
+
+export  {login,logout,get,post,deleteUser,accessHeader,takeRole,takeUsername}

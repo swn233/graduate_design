@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.backend.entity.dto.Account;
 import com.example.backend.entity.vo.request.ConfirmResetVO;
 import com.example.backend.entity.vo.request.EmailRegisterVO;
+import com.example.backend.entity.vo.request.AccountEditVO;
 import com.example.backend.entity.vo.response.EmailResetVO;
 import com.example.backend.mapper.AccountMapper;
 import com.example.backend.service.AccountService;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -139,5 +141,54 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         return null;
     }
 
+    @Override
+    public List<Account> getAllAccounts() {
+        return this.list();
+    }
+
+    @Override
+    public void deleteAccountById(int id) {
+        this.removeById(id);
+    }
+
+    @Override
+    public String editAccount(AccountEditVO vo) {
+        Account account = this.getById(vo.getId());
+        if (account == null) {
+            return "账户不存在";
+        }
+        // 检查是否有任何信息被修改
+        boolean updated = false;
+        if (vo.getUsername() != null && !vo.getUsername().isEmpty() && !vo.getUsername().equals(account.getUsername())) {
+            // 检查新用户名是否已存在
+            if (this.existedAccountByUsername(vo.getUsername())) {
+                return "此用户名已被其他用户注册，请更换一个新的用户名";
+            }
+            account.setUsername(vo.getUsername());
+            updated = true;
+        }
+        if (vo.getEmail() != null && !vo.getEmail().isEmpty() && !vo.getEmail().equals(account.getEmail())) {
+            // 检查新邮箱是否已存在
+            if (this.existedAccountByEmail(vo.getEmail())) {
+                return "此邮箱已被其他用户注册，请更换一个新的邮箱";
+            }
+            account.setEmail(vo.getEmail());
+            updated = true;
+        }
+        if (vo.getPassword() != null && !vo.getPassword().isEmpty()) {
+            account.setPassword(encoder.encode(vo.getPassword()));
+            updated = true;
+        }
+
+        if (updated) {
+            if (this.updateById(account)) {
+                return null; // 成功
+            } else {
+                return "更新账户信息失败，请联系管理员";
+            }
+        } else {
+            return "未提供任何需要修改的信息或信息与原信息相同";
+        }
+    }
 }
 

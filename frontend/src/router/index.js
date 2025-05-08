@@ -5,7 +5,7 @@ const router=createRouter({
     routes:[
     {
       path: '/article/:id',
-      name: 'ArticleDetail',
+      name: 'authorized-ArticleDetail',
       component: () => import('../views/article/ArticleDetail.vue'),
       props: true
     },
@@ -31,28 +31,52 @@ const router=createRouter({
         },
         {
             path:'/index',
-            name:'index',
+            name:'authorized-index',
             component:()=>import('../views/indexView.vue')
         },
             {
                 path:'/write',
-                name:'write',
+                name:'authorized-write',
                 component:()=>import('@/views/article/write/WriteArticle.vue')
             }
             ,
             {
                 path:'/notebook',
-                name:'notebook',
+                name:'authorized-notebook',
                 component:()=>import('@/views/explore/components/NotebookView.vue')
+            },
+            {
+                path:'/label',
+                name:'authorized-label',
+                component:()=>import('@/views/explore/components/ImageLabelView.vue')
+            },{
+                path: '/manage',
+                name:'authorized-manage',
+                component: () => import('../views/manage/ManageView.vue'),
+                redirect: '/manage/users',
+                children: [
+                    { path: 'users',
+                        name:'authorized-users',
+                        component: () => import('../views/manage/UserManagement.vue') },
+                    { path: 'datasets', 
+                        name:'authorized-datasets',
+                        omponent: () => import('../views/manage/DatasetManagement.vue') },
+                    { path: 'articles',
+                        name:'authorized-articles', 
+                        component: () => import('../views/manage/ArticleManagement.vue') },
+                    { path: 'models', 
+                        name:'authorized-models',
+                        component: () => import('../views/manage/ModelManagement.vue') }
+                ]
             }
-        
     ]
 })
+
 router.beforeEach((to,from,next)=>{
     const isUnauthorized=unauthorized()
     if(to.name.startsWith('welcome-')&&!isUnauthorized){
         next('/index')
-    }else if(to.fullPath.startsWith('/index')&&isUnauthorized){
+    }else if(to.name.startsWith('authorized')&&isUnauthorized){
         next('/')
     }else {
         next()
