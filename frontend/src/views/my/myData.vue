@@ -72,28 +72,27 @@ const createDataset = () => {
       <el-button type="primary" @click="openDialog">新建数据集</el-button>
     </div>
     
-    <div class="datasets-list">
-      <el-card v-for="dataset in datasets" :key="dataset.id" class="dataset-card">
-        <div class="dataset-header">
-          <h2 class="dataset-name">{{ dataset.name }}</h2>
-          <el-tag :type="dataset.type === '图像' ? 'success' : dataset.type === '文本' ? 'primary' : 'warning'">
-            {{ dataset.type }}
+    <el-table :data="datasets" style="width: 100%;" border>
+      <el-table-column prop="id" label="ID" width="60" align="center"/>
+      <el-table-column prop="name" label="数据集名称" align="center"/>
+      <el-table-column prop="description" label="描述" align="center"/>
+      <el-table-column prop="type" label="类型" width="80" align="center">
+        <template #default="scope">
+          <el-tag :type="scope.row.type === '图像' ? 'success' : scope.row.type === '文本' ? 'primary' : scope.row.type === '音频' ? 'warning' : 'info'">
+            {{ scope.row.type }}
           </el-tag>
-        </div>
-        <p class="dataset-description">{{ dataset.description }}</p>
-        <div class="dataset-footer">
-          <div class="dataset-info">
-            <span class="dataset-time">创建时间: {{ dataset.createTime }}</span>
-            <span class="dataset-size">大小: {{ dataset.size }}</span>
-          </div>
-          <div class="dataset-actions">
-            <el-button type="primary" size="small" text>查看</el-button>
-            <el-button type="danger" size="small" text>删除</el-button>
-          </div>
-        </div>
-      </el-card>
-    </div>
-    
+        </template>
+      </el-table-column>
+      <el-table-column prop="size" label="大小" width="100" align="center"/>
+      <el-table-column prop="createTime" label="创建时间" width="120" align="center"/>
+      <el-table-column label="操作" width="150" align="center">
+        <template #default="scope">
+          <el-button type="primary" size="small" text>查看</el-button>
+          <el-button type="danger" size="small" text>删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <!-- 新建数据集对话框 -->
     <el-dialog v-model="dialogVisible" title="新建数据集" width="30%">
       <el-form :model="newDataset" label-width="80px">
@@ -140,61 +139,5 @@ const createDataset = () => {
   font-weight: bold;
   color: #333;
   margin: 0;
-}
-
-.datasets-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.dataset-card {
-  transition: all 0.3s;
-}
-
-.dataset-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-}
-
-.dataset-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.dataset-name {
-  font-size: 18px;
-  margin: 0;
-  color: #333;
-}
-
-.dataset-description {
-  color: #666;
-  margin-bottom: 15px;
-  min-height: 40px;
-}
-
-.dataset-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-}
-
-.dataset-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.dataset-time, .dataset-size {
-  color: #999;
-}
-
-.dataset-actions {
-  display: flex;
-  gap: 10px;
 }
 </style>

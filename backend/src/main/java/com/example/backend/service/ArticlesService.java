@@ -28,4 +28,8 @@ public interface ArticlesService extends IService<Articles>{
      * @return 保存结果
      */
     String saveArticleByVO(ArticlesWriteVO vo);
+
+    String editArticle(Articles article);
+
+    boolean deleteArticleById(Long id);
 }

@@ -1,5 +1,5 @@
 import {createRouter,createWebHistory}from "vue-router";
-import {unauthorized} from "@/net/index.js";
+import {unauthorized,takeRole} from "@/net/index.js";
 const router=createRouter({
     history:createWebHistory(import.meta.env.BASE_URL),
     routes:[
@@ -71,14 +71,20 @@ const router=createRouter({
             }
     ]
 })
-
-router.beforeEach((to,from,next)=>{
-    const isUnauthorized=unauthorized()
-    if(to.name.startsWith('welcome-')&&!isUnauthorized){
+router.beforeEach((to, from, next) => {
+    const isUnauthorized = unauthorized()
+    const userRole = JSON.parse(takeRole());
+    if(to.name.startsWith('welcome-') && !isUnauthorized) {
         next('/index')
-    }else if(to.name.startsWith('authorized')&&isUnauthorized){
+    } else if(to.name.startsWith('authorized') && isUnauthorized) {
         next('/')
-    }else {
+    } else if(to.path.startsWith('/manage')) {
+        if(userRole === "admin") {
+            next()
+        } else {
+            next('/index')
+        }
+    } else {
         next()
     }
 })

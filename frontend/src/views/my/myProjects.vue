@@ -67,25 +67,26 @@ const createProject = () => {
       <el-button type="primary" @click="openDialog">新建项目</el-button>
     </div>
     
-    <div class="projects-list">
-      <el-card v-for="project in projects" :key="project.id" class="project-card">
-        <div class="project-header">
-          <h2 class="project-name">{{ project.name }}</h2>
-          <el-tag :type="project.status === '已完成' ? 'success' : project.status === '进行中' ? 'primary' : 'info'">
-            {{ project.status }}
+    <el-table :data="projects" style="width: 100%;" border>
+      <el-table-column prop="id" label="ID" width="60" align="center"/>
+      <el-table-column prop="name" label="项目名称" align="center"/>
+      <el-table-column prop="description" label="描述" align="center"/>
+      <el-table-column prop="status" label="状态" width="100" align="center">
+        <template #default="scope">
+          <el-tag :type="scope.row.status === '已完成' ? 'success' : scope.row.status === '进行中' ? 'primary' : 'info'">
+            {{ scope.row.status }}
           </el-tag>
-        </div>
-        <p class="project-description">{{ project.description }}</p>
-        <div class="project-footer">
-          <span class="project-time">创建时间: {{ project.createTime }}</span>
-          <div class="project-actions">
-            <el-button type="primary" size="small" text>编辑</el-button>
-            <el-button type="danger" size="small" text>删除</el-button>
-          </div>
-        </div>
-      </el-card>
-    </div>
-    
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" width="120" align="center"/>
+      <el-table-column label="操作" width="150" align="center">
+        <template #default="scope">
+          <el-button type="primary" size="small" text>编辑</el-button>
+          <el-button type="danger" size="small" text>删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <!-- 新建项目对话框 -->
     <el-dialog v-model="dialogVisible" title="新建项目" width="30%">
       <el-form :model="newProject" label-width="80px">
@@ -123,55 +124,5 @@ const createProject = () => {
   font-weight: bold;
   color: #333;
   margin: 0;
-}
-
-.projects-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.project-card {
-  transition: all 0.3s;
-}
-
-.project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-}
-
-.project-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.project-name {
-  font-size: 18px;
-  margin: 0;
-  color: #333;
-}
-
-.project-description {
-  color: #666;
-  margin-bottom: 15px;
-  min-height: 40px;
-}
-
-.project-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-}
-
-.project-time {
-  color: #999;
-}
-
-.project-actions {
-  display: flex;
-  gap: 10px;
 }
 </style>

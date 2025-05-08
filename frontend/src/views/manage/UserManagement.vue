@@ -1,6 +1,6 @@
 <template>
   <div class="management-container" ref="tableContainerRef">
-    <el-table class="table" :data="paginatedUsers" style="width: 100%;height: 80vh;" border stripe ref="tableRef">
+    <el-table class="table" :data="paginatedUsers" style="width: 100%;" border stripe ref="tableRef">
       <el-table-column prop="id" label="ID" width="80" align="center" />
       <el-table-column prop="username" label="用户名" align="center" />
       <el-table-column prop="email" label="邮箱" width="220" align="center" />
@@ -104,7 +104,8 @@ const updatePageSize = async () => {
       }
 
       if (availableHeight > 0 && rowHeight > 0) {
-        const newSize = Math.max(1, Math.floor(availableHeight / rowHeight))
+        // 计算可以显示的行数，向上取整以确保填满空间
+        const newSize = Math.ceil(availableHeight / rowHeight)
         if (dynamicPageSize.value !== newSize) {
           dynamicPageSize.value = newSize
           // 如果当前页在新页面大小下超出范围，则调整
@@ -206,22 +207,30 @@ const handleCurrentChange = (val) => {
 <style scoped>
 .management-container {
   padding: 20px;
-  overflow: hidden; /* 确保容器本身不会出现滚动条，而是让表格内部滚动 */
-  display: flex; /* 使用 flex 布局来更好地控制子元素 */
-  flex-direction: column; /* 垂直排列表格和分页 */
-  height: calc(100vh - 100px); /* 示例：减去头部和一些边距，确保容器有确定高度 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 50px);
+  box-sizing: border-box;
 }
 
 .table {
-  flex-grow: 1; /* 让表格占据剩余空间 */
-  overflow: hidden; /* 表格自身处理滚动 */
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.table :deep(.el-table__body-wrapper) {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .pagination-block {
   margin-top: 10px;
-  flex-shrink: 0; /* 防止分页组件被压缩 */
+  flex-shrink: 0;
   display: flex;
-  justify-content: center; /* 分页居中 */
+  justify-content: center;
 }
 
 /* .nstration class was unused, removed from template */

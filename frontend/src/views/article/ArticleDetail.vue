@@ -1,17 +1,39 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { get } from '@/net'
+import { useRoute, useRouter } from 'vue-router'
+import { get, post } from '@/net'
 import ArticleComments from '@/components/article/ArticleComments.vue'
+import { ElMessage } from 'element-plus'
+
 const route = useRoute()
+const router = useRouter()
 const article = ref({})
+const isEditing = ref(false)
+const editedArticle = ref({})
 
 const loadArticle = () => {
   get(`/api/article/${route.params.id}`, data => {
     article.value = data
-    console.log("publishtime",data.publish_time)
+    editedArticle.value = { ...data }
     document.title = data.title + ' - AI应用平台'
   })
+}
+
+const startEdit = () => {
+  isEditing.value = true
+}
+
+const saveEdit = () => {
+  post('/api/article/edit', editedArticle.value, (message) => {
+    ElMessage.success(message)
+    isEditing.value = false
+    loadArticle()
+  })
+}
+
+const cancelEdit = () => {
+  isEditing.value = false
+  editedArticle.value = { ...article.value }
 }
 
 // 引入markdown-it库进行Markdown渲染
@@ -149,5 +171,17 @@ onMounted(() => {
 .markdown-preview :deep(pre) {
   margin: 20px auto;
   display: block;
+}
+
+.article-header {
+  padding: 20px;
+}
+
+.article-actions {
+  margin-top: 15px;
+}
+
+.article-actions .el-button {
+  margin-right: 10px;
 }
 </style>

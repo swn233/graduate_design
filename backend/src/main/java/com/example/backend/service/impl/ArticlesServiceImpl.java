@@ -39,5 +39,25 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
         }
         return "文章保存失败";
     }
-    
+
+
+    @Override
+    public String editArticle(Articles article) {
+        if (article == null || article.getId() == null) {
+            return "文章信息不完整";
+        }
+        Articles existingArticle = this.getById(article.getId());
+        if (existingArticle == null) {
+            return "未找到文章";
+        }
+        if (this.updateById(article)) {
+            return "文章编辑成功";
+        }
+        return "文章编辑失败";
+    }
+
+    @Override
+    public boolean deleteArticleById(Long id) {
+        return this.removeById(id);
+    }
 }

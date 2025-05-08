@@ -67,25 +67,26 @@ const createApp = () => {
       <el-button type="primary" @click="openDialog">新建应用</el-button>
     </div>
     
-    <div class="apps-list">
-      <el-card v-for="app in apps" :key="app.id" class="app-card">
-        <div class="app-header">
-          <h2 class="app-name">{{ app.name }}</h2>
-          <el-tag :type="app.status === '已上线' ? 'success' : app.status === '测试中' ? 'warning' : 'info'">
-            {{ app.status }}
+    <el-table :data="apps" style="width: 100%;" border>
+      <el-table-column prop="id" label="ID" width="60" align="center"/>
+      <el-table-column prop="name" label="应用名称" align="center"/>
+      <el-table-column prop="description" label="描述" align="center"/>
+      <el-table-column prop="status" label="状态" width="100" align="center">
+        <template #default="scope">
+          <el-tag :type="scope.row.status === '已上线' ? 'success' : scope.row.status === '测试中' ? 'warning' : 'info'">
+            {{ scope.row.status }}
           </el-tag>
-        </div>
-        <p class="app-description">{{ app.description }}</p>
-        <div class="app-footer">
-          <span class="app-time">创建时间: {{ app.createTime }}</span>
-          <div class="app-actions">
-            <el-button type="primary" size="small" text>编辑</el-button>
-            <el-button type="danger" size="small" text>删除</el-button>
-          </div>
-        </div>
-      </el-card>
-    </div>
-    
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" width="120" align="center"/>
+      <el-table-column label="操作" width="150" align="center">
+        <template #default="scope">
+          <el-button type="primary" size="small" text>编辑</el-button>
+          <el-button type="danger" size="small" text>删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <!-- 新建应用对话框 -->
     <el-dialog v-model="dialogVisible" title="新建应用" width="30%">
       <el-form :model="newApp" label-width="80px">
@@ -123,55 +124,5 @@ const createApp = () => {
   font-weight: bold;
   color: #333;
   margin: 0;
-}
-
-.apps-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.app-card {
-  transition: all 0.3s;
-}
-
-.app-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-}
-
-.app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.app-name {
-  font-size: 18px;
-  margin: 0;
-  color: #333;
-}
-
-.app-description {
-  color: #666;
-  margin-bottom: 15px;
-  min-height: 40px;
-}
-
-.app-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-}
-
-.app-time {
-  color: #999;
-}
-
-.app-actions {
-  display: flex;
-  gap: 10px;
 }
 </style>
