@@ -126,7 +126,11 @@ const editArticle = (article) => {
       title: article.title,
       author: article.author,
       content: article.content,
-      image: article.image
+      image: article.image,
+      comments: article.comments || '[]',
+      recentSevenDaysLikes: article.recentSevenDaysLikes || 0,
+      recentLikes: article.recentLikes || 0,
+      views: article.view_count || 0
     }
   })
 }

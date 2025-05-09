@@ -2,13 +2,38 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Document, Edit, Picture, Upload, Check } from '@element-plus/icons-vue'
+import { useRoute, useRouter } from 'vue-router'
+import { post } from '@/net'
+import MarkdownIt from 'markdown-it'
+
+const router = useRouter()
+const route = useRoute()
+
+// 初始化 markdown-it
+const md = new MarkdownIt({
+  html: true,        // 允许HTML标签
+  breaks: true,      // 转换\n为<br>
+  linkify: true,     // 自动转换URL为链接
+  typographer: true  // 启用一些语言中立的替换和引号美化
+})
+
+// Markdown 渲染函数
+const renderMarkdown = (text) => {
+  return md.render(text || '')
+}
 
 // 文章内容状态
 const article = reactive({
+  id: '',
   title: '',
   content: '',
   image: '',
-  tags: []
+  tags: [],
+  author: '',
+  comments: '[]',
+  recentSevenDaysLikes: 0,
+  recentLikes: 0,
+  views: 0
 })
 
 // 编辑器状态
@@ -26,57 +51,96 @@ const triggerFileInput = () => {
   fileInputRef.value?.click()
 }
 
+// 在组件挂载时获取路由参数
+onMounted(() => {
+  const query = route.query
+  if (query.id) {
+    // 编辑模式
+    article.id = query.id
+    article.title = query.title || ''
+    article.content = query.content || ''
+    article.image = query.image || ''
+    article.author = query.author || ''
+    article.comments = query.comments || '[]'
+    article.recentSevenDaysLikes = Number(query.recentSevenDaysLikes) || 0
+    article.recentLikes = Number(query.recentLikes) || 0
+    article.views = Number(query.views) || 0
+  }
+})
 
-
-// 保存文章
-const saveArticle = () => {
+// 验证文章基本字段
+const validateArticle = (requireImage = false) => {
   if (!article.title.trim()) {
     ElMessage.warning('请输入文章标题')
-    return
+    return false
   }
   
   if (!article.content.trim()) {
     ElMessage.warning('请输入文章内容')
+    return false
+  }
+
+  if (requireImage && !article.image) {
+    ElMessage.warning('请上传文章封面')
+    return false
+  }
+
+  return true
+}
+
+// 提交文章
+const submitArticle = (isPublish = false) => {
+  if (!validateArticle(isPublish)) {
     return
   }
   
-  isSaving.value = true
+  if (isPublish) {
+    isSaving.value = true
+  }
   
-  // 这里应该调用API保存文章
-  // 模拟API调用
-  setTimeout(() => {
-    ElMessage.success('文章保存成功')
+  const articleData = {
+    id: article.id,
+    title: article.title,
+    content: article.content,
+    image: article.image,
+    author: article.author,
+    comments: article.comments,
+    recentSevenDaysLikes: article.recentSevenDaysLikes,
+    recentLikes: article.recentLikes,
+    views: article.views
+  }
+
+  // 如果是发布，添加发布时间
+  if (isPublish) {
+    articleData.publish_time = new Date().toISOString()
+  }
+
+  // 根据是否有 id 判断是新增还是更新
+  const url = article.id ? '/api/article/edit' : '/api/article/save'
+  
+  post(url, articleData, (res) => {
+    ElMessage.success(article.id ? 
+      (isPublish ? '文章发布成功' : '文章保存成功') : 
+      (isPublish ? '文章发布成功' : '文章保存成功'))
+    
+    if (isPublish || article.id) {
+      router.back()
+    }
+  }, (err) => {
+    ElMessage.error(err)
+  }).finally(() => {
     isSaving.value = false
-  }, 1000)
+  })
+}
+
+// 保存文章
+const saveArticle = () => {
+  submitArticle(false)
 }
 
 // 发布文章
 const publishArticle = () => {
-  if (!article.title.trim()) {
-    ElMessage.warning('请输入文章标题')
-    return
-  }
-  
-  if (!article.content.trim()) {
-    ElMessage.warning('请输入文章内容')
-    return
-  }
-
-  if (!article.image) {
-    ElMessage.warning('请上传文章封面')
-    return
-  }
-  
-  const articleData = {
-    title: article.title,
-    content: article.content,
-    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=200&fit=crop&q=80',
-    author:'test'
-  }
-  // 这里应该调用API发布文章
-  post('/api/article/save',articleData,()=>{
-    ElMessage.success('文章发布成功')
-  } )
+  submitArticle(true)
 }
 
 // 处理标签相关操作
@@ -104,16 +168,25 @@ const handleTagClose = (tag) => {
 
 // 处理图片上传
 const handleImageUpload = (event) => {
-  console.log("触发了")
   const file = event.target.files[0]
   if (file) {
-    // 在实际应用中，这里应该上传图片到服务器
-    // 这里仅做演示，将图片转为base64显示
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      article.image = e.target.result
-    }
-    reader.readAsDataURL(file)
+    // 显示上传中状态
+    ElMessage.info('图片上传中...')
+
+    // 创建 FormData 对象上传到服务器
+    const formData = new FormData()
+    formData.append('file', file)
+
+    // 调用上传接口
+    post('/api/article/upload/image', formData, (res) => {
+      // 上传成功后设置图片URL
+      article.image = res
+      ElMessage.success('图片上传成功')
+    }, (err) => {
+      ElMessage.error('图片上传失败：' + err)
+      // 上传失败时清空图片
+      article.image = ''
+    })
   }
 }
 
@@ -328,29 +401,6 @@ const handlePreviewScroll = (e) => {
     </div>
   </div>
 </template>
-
-<script>
-// 引入markdown-it库进行Markdown渲染
-import MarkdownIt from 'markdown-it'
-import { post } from '@/net/index.js'
-
-const md = new MarkdownIt({
-  html: true,        // 允许HTML标签
-  breaks: true,      // 转换\n为<br>
-  linkify: true,     // 自动转换URL为链接
-  typographer: true  // 启用一些语言中立的替换和引号美化
-})
-
-function renderMarkdown(text) {
-  return md.render(text || '')
-}
-
-export default {
-  methods: {
-    renderMarkdown
-  }
-}
-</script>
 
 <style scoped>
 .write-container {
