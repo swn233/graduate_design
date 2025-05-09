@@ -178,7 +178,7 @@ const handleImageUpload = (event) => {
     formData.append('file', file)
 
     // 调用上传接口
-    post('/api/article/upload/image', formData, (res) => {
+    post('/api/image/upload', formData, (res) => {
       // 上传成功后设置图片URL
       article.image = res
       ElMessage.success('图片上传成功')
