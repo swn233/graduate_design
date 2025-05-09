@@ -78,6 +78,21 @@ const injectCustomStyles = (iframe) => {
       ::-webkit-scrollbar-track {
         background: #f5f7fa;
       }
+
+      /* 修改 Logo 样式 */
+      .lsf-header__logo {
+        background-image: url('您的logo图片URL') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        width: 120px !important; /* 调整宽度 */
+        height: 40px !important; /* 调整高度 */
+      }
+
+      /* 隐藏原有的 Logo 文字 */
+      .lsf-header__logo-text {
+        display: none !important;
+      }
     `
     iframe.contentDocument.head.appendChild(style)
   } catch (e) {
