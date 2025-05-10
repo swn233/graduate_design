@@ -79,7 +79,7 @@ const validateArticle = (requireImage = false) => {
     ElMessage.warning('请输入文章内容')
     return false
   }
-
+  
   if (requireImage && !article.image) {
     ElMessage.warning('请上传文章封面')
     return false
@@ -93,7 +93,7 @@ const submitArticle = (isPublish = false) => {
   if (!validateArticle(isPublish)) {
     return
   }
-  
+
   if (isPublish) {
     isSaving.value = true
   }

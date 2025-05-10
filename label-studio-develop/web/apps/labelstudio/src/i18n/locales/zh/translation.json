@@ -1,0 +1,25 @@
+{
+  "menu": {
+    "home": "首页",
+    "projects": "项目",
+    "pin": "固定菜单",
+    "unpin": "取消固定菜单"
+  },
+  "projects": {
+    "title": "我的项目",
+    "subtitle": "管理您的所有标注项目",
+    "create": "创建项目",
+    "invite": "邀请成员",
+    "empty": {
+      "title": "创建您的第一个项目",
+      "description": "导入数据并设置标注界面开始标注"
+    },
+    "card": {
+      "settings": "项目设置",
+      "data": "数据管理",
+      "export": "导出数据",
+      "completed": "已完成",
+      "total": "总数"
+    }
+  }
+} 

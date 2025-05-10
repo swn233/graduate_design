@@ -149,7 +149,7 @@ onMounted(() => {
         <template #default="scope">
           <el-button type="primary" size="small" text @click="viewDataset(scope.row.id)">查看</el-button>
           <el-button type="danger" size="small" text @click="deleteDataset(scope.row.id)">删除</el-button>
-        </template>
+      </template>
       </el-table-column>
     </el-table>
   </div>

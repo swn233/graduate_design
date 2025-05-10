@@ -1,0 +1,18 @@
+<svg width="194" height="24" xmlns="http://www.w3.org/2000/svg" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none">
+ <g id="Layer_1">
+  <title>Layer 1</title>
+  <g id="svg_3">
+   <circle id="svg_4" cx="16.23135" cy="12" r="10" fill="#4B5563"/>
+   <path id="svg_5" d="m16.23135,16l0,-4m0,-4l0.01,0" stroke="#ffffff"/>
+   <path id="svg_6" d="m19.23135,9.354a4,4 0 1 0 0,5.292" stroke="#ffffff"/>
+   <path id="svg_7" d="m13.23135,14.646a4,4 0 1 0 0,-5.292" stroke="#ffffff"/>
+  </g>
+  <text fill="#000" stroke="#000000" stroke-width="0" x="32.38509" y="19.69224" id="svg_1" font-size="24" font-family="'Andada Pro'" text-anchor="start" xml:space="preserve" font-style="italic" font-weight="bold" filter="url(#svg_1_blur)">PAIC</text>
+  <text fill="#000000" stroke-width="0" x="66.74588" y="15.3443" id="svg_2" font-size="24" font-family="'Big Shoulders Display'" text-anchor="start" xml:space="preserve" stroke="#000000" transform="matrix(0.751612 0 0 0.751612 46.6022 6.48053)">标注</text>
+ </g>
+ <defs>
+  <filter id="svg_1_blur">
+   <feGaussianBlur in="SourceGraphic" stdDeviation="0"/>
+  </filter>
+ </defs>
+</svg>

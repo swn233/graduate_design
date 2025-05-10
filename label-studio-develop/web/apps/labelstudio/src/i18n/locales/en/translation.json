@@ -1,0 +1,25 @@
+{
+  "menu": {
+    "home": "Home",
+    "projects": "Projects",
+    "pin": "Pin Menu",
+    "unpin": "Unpin Menu"
+  },
+  "projects": {
+    "title": "My Projects",
+    "subtitle": "Manage all your labeling projects",
+    "create": "Create Project",
+    "invite": "Invite People",
+    "empty": {
+      "title": "Create Your First Project",
+      "description": "Import data and set up labeling interface to start labeling"
+    },
+    "card": {
+      "settings": "Project Settings",
+      "data": "Data Management",
+      "export": "Export Data",
+      "completed": "Completed",
+      "total": "Total"
+    }
+  }
+} 

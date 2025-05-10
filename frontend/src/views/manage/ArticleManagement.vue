@@ -15,14 +15,14 @@
     </el-table>
 
     <div class="pagination-block">
-      <el-pagination
+    <el-pagination
         v-model:current-page="currentPage"
         :page-size="dynamicPageSize"
         :background="true"
         layout="prev, pager, next, jumper"
         :total="articleList.length"
         @current-change="handleCurrentChange"
-      />
+    />
     </div>
   </div>
 </template>

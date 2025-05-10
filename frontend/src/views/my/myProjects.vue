@@ -81,12 +81,12 @@ const createProject = () => {
       <el-table-column prop="createTime" label="创建时间" width="120" align="center"/>
       <el-table-column label="操作" width="150" align="center">
         <template #default="scope">
-          <el-button type="primary" size="small" text>编辑</el-button>
-          <el-button type="danger" size="small" text>删除</el-button>
+            <el-button type="primary" size="small" text>编辑</el-button>
+            <el-button type="danger" size="small" text>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
+    
     <!-- 新建项目对话框 -->
     <el-dialog v-model="dialogVisible" title="新建项目" width="30%">
       <el-form :model="newProject" label-width="80px">
