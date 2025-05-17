@@ -18,9 +18,12 @@ const carouselItems = ref([])
 // 获取轮播图数据
 const loadCarouselData =  () => {
   get('/api/article/all', (data) => {
-        console.log('获取轮播图文章列表成功', data)
-        carouselItems.value = data
-    })
+    console.log('获取轮播图文章列表成功', data)
+    // 按创建时间排序并只取最新的5篇
+    carouselItems.value = data
+      .sort((a, b) => new Date(b.createTime) - new Date(a.createTime))
+      .slice(0, 5)
+  })
 }
 
 // 在组件挂载时获取数据

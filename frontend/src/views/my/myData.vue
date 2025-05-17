@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
-
+import { get } from '@/net';
 const router = useRouter();
 const loading = ref(false);
 

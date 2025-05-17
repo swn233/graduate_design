@@ -78,8 +78,8 @@ onMounted(() => {
     <div class="markdown-preview" >
         <div v-if="article.content" v-html="renderMarkdown(article.content)" class="article-content"></div>
         <div v-else class="empty-preview">预览区域为空，请先编写内容</div>
-      </div>
-    <article-comments v-if="article.comments" :comments="article.comments" />
+    </div>
+    <article-comments />
   </div>
 </template>
 

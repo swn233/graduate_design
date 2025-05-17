@@ -104,7 +104,7 @@ const essentialCourses = ref([
 ])
 
 const handleCarouselClick = (id) => {
-  console.log('点击了轮播图', id)
+  window.location.href = `/learn/course/${id}`
 }
 
 const handleCarouselHover = (index) => {
@@ -116,7 +116,7 @@ const handleCategoryClick = (category) => {
 }
 
 const handleCourseClick = (course) => {
-  console.log('点击了课程', course)
+  window.location.href = `/learn/course/${course.id}`
 }
 </script>
 

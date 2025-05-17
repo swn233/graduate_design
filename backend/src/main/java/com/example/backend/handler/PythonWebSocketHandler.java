@@ -20,16 +20,23 @@ public class PythonWebSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
+    public void afterConnectionEstablished(WebSocketSession session) {
+        // 连接建立时启动Python进程
+        pythonService.startPythonProcess(session.getId(), session);
+    }
+
+    @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String code = message.getPayload();
-        new Thread(() -> {
-            try {
-                String result = pythonService.executePythonCode(code);
-                System.out.println("后端handler执行");
-                session.sendMessage(new TextMessage(result));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        String sessionId = session.getId();
+        
+        // 执行Python代码
+        pythonService.executePythonCode(sessionId, code, session);
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) {
+        // 连接关闭时停止Python进程
+        pythonService.stopPythonProcess(session.getId());
     }
 }

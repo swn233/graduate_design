@@ -41,9 +41,10 @@ const router=createRouter({
             }
             ,
             {
-                path:'/notebook',
-                name:'authorized-notebook',
-                component:()=>import('@/views/explore/components/NotebookView.vue')
+                path:'/notebook/:id',
+                name:'notebook',
+                component:()=>import('@/views/explore/components/NotebookView.vue'),
+                props: true
             },
             {
                 path:'/label',
@@ -68,7 +69,14 @@ const router=createRouter({
                         name:'authorized-models',
                         component: () => import('../views/manage/ModelManagement.vue') }
                 ]
+            },
+            {
+                path: '/learn/course/:id',
+                name: 'authorized-course-detail',
+                component: () => import('../views/learn/course.vue'),
+                props: true
             }
+            
     ]
 })
 router.beforeEach((to, from, next) => {

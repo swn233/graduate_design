@@ -4,8 +4,7 @@ import router from "@/router/index.js";
 import { ref, onMounted } from 'vue';
 import ExploreIndex from './explore/exploreIndex.vue';
 import LearnIndex from './learn/learnIndex.vue';
-import MyProjects from './my/myProjects.vue';
-import MyApps from './my/myApps.vue';
+import MyCases from './my/myCases.vue';
 import MyData from './my/myData.vue';
 import MyModels from './my/myModels.vue';
 import ArticleIndex from './article/articleIndex.vue';
@@ -134,14 +133,9 @@ onMounted(() => {
           <span v-if="!isCollapse">我的</span>
         </div>
         
-        <el-menu-item index="my-projects">
+        <el-menu-item index="my-cases">
           <el-icon><icon-document /></el-icon>
-          <span>项目</span>
-        </el-menu-item>
-        
-        <el-menu-item index="my-apps">
-          <el-icon><icon-menu /></el-icon>
-          <span>应用</span>
+          <span>案例</span>
         </el-menu-item>
         
         <el-menu-item index="my-data">
@@ -168,8 +162,7 @@ onMounted(() => {
               <explore-index v-if="activeIndex === 'explore'" :is-collapse="isCollapse" />
               <learn-index v-else-if="activeIndex === 'learn'" :is-collapse="isCollapse" />
               <div v-else-if="activeIndex.startsWith('my-')">
-                <my-projects v-if="activeIndex === 'my-projects'" :is-collapse="isCollapse" />
-                <my-apps v-else-if="activeIndex === 'my-apps'" :is-collapse="isCollapse" />
+                <my-cases v-if="activeIndex === 'my-cases'" :is-collapse="isCollapse" />
                 <my-data v-else-if="activeIndex === 'my-data'" :is-collapse="isCollapse" />
                 <my-models v-else-if="activeIndex === 'my-models'" :is-collapse="isCollapse" />
                 <article-index v-else-if="activeIndex === 'my-articles'" :is-collapse="isCollapse" />

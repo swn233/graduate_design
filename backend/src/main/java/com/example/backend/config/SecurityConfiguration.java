@@ -43,7 +43,9 @@ public class SecurityConfiguration {
                         .requestMatchers(
                             "/api/auth/*",
                             "/error",
-                            "/images/**"
+                            "/images/**",
+                            "/api/projects/**",
+                            "http://localhost:8010/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(conf->conf
